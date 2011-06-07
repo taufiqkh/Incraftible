@@ -1,9 +1,6 @@
 package com.quiptiq.nocraft;
 
-import static com.quiptiq.nocraft.Message.LOG_DEFAULT_CONFIG;
-import static com.quiptiq.nocraft.Message.LOG_WARN_INVALID_DISALLOWED_ITEM_ID;
-import static com.quiptiq.nocraft.Message.LOG_WARN_INVALID_KEY;
-import static com.quiptiq.nocraft.Message.LOG_WARN_NULL_DISALLOWED_ITEM_ID;
+import static com.quiptiq.nocraft.Message.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,12 +19,149 @@ import org.bukkit.util.config.ConfigurationNode;
 /**
  * Configuration for NoCraft.
  *
- * <p>NOTE:
- * <p>Overengineered at the moment, while exploring how Bukkit config works.
+ * <p>
+ * NOTE:
+ * <p>
+ * Overengineered at the moment, while exploring how Bukkit config works.
  *
  * @author Taufiq Hoven
  */
 public class NoCraftConfig {
+    /**
+     * Delimits item names in logs.
+     */
+    private static final String ITEM_NAME_DELIMITER = " ";
+
+    private final Logger log = Logger.getLogger(NoCraft.DEFAULT_LOGGER);
+
+    private Configuration config;
+
+    private final HashSet<Material> disallowedItems = new HashSet<Material>();
+
+    /**
+     * Creates a new NoCraftConfig based on the specified Bukkit configuration.
+     *
+     * @param newConfig
+     *            Bukkit config on which properties are retrieved.
+     */
+    public NoCraftConfig(Configuration newConfig) {
+        loadConfig(newConfig);
+    }
+
+    /**
+     * Loads configuration fropm the specified Bukkit configuration, discarding
+     * any current settings.
+     *
+     * @param newConfig
+     *            Bukkit config on which properties are retrieved.
+     */
+    public void loadConfig(Configuration newConfig) {
+        config = newConfig;
+        Map<String, ConfigurationNode> nodes = null;
+        if (config != null) {
+            nodes = config.getNodes("");
+        }
+        Set<String> keys;
+        if (nodes == null) {
+            log.info(LOG_DEFAULT_CONFIG);
+            keys = new HashSet<String>();
+        } else {
+            keys = config.getNodes(null).keySet();
+        }
+
+        for (String key : keys) {
+            if (!ConfigType.isKeyUnderstood(key)) {
+                log.warning(String.format(LOG_WARN_INVALID_KEY, key));
+            }
+        }
+        StringBuilder itemNames = new StringBuilder();
+        if (keys.contains(ConfigType.DISALLOWED_ITEM.key)) {
+            List<Integer> disallowedItemIds = config.getIntList(
+                    ConfigType.DISALLOWED_ITEM.key, new ArrayList<Integer>());
+            for (Integer disallowedItemId : disallowedItemIds) {
+                // Check for null
+                if (disallowedItemId == null) {
+                    log.warning(LOG_WARN_NULL_DISALLOWED_ITEM_ID);
+                } else {
+                    Material material = Material.getMaterial(disallowedItemId);
+                    // Check for bad item id
+                    if (material == null) {
+                        log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, disallowedItemId));
+                    } else {
+                        disallowedItems.add(material);
+                        if (itemNames.length() > 0) {
+                            itemNames.append(ITEM_NAME_DELIMITER);
+                        }
+                        itemNames.append(material.name());
+                    }
+                }
+            }
+        }
+        if (disallowedItems.size() == 0) {
+            log.info(LOG_ITEM_DISALLOW_NONE);
+        } else {
+            log.info(String.format(LOG_ITEM_DISALLOW_LIST, itemNames.toString()));
+        }
+    }
+
+    /**
+     * Disallows the specified item and saves the config. If the item is already disallowed, does nothing.
+     *
+     * @param material
+     *            Material of item to disallow.
+     * @return True if the disallow was successful, false if the item was null.
+     */
+    public boolean disallowItem(Material material) {
+        if (material == null) {
+            log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, material));
+            return false;
+        }
+        disallowedItems.add(material);
+        return saveDisallowedItems();
+    }
+
+    /**
+     * Allows the specified item and saves the config. If the item is already allowed, does nothing.
+     *
+     * @param material
+     *            Id of the item to allow.
+     * @return True if the allow was successful, false if the item id was
+     *         invalid.
+     */
+    public boolean allowItem(Material material) {
+        if (material == null) {
+            log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, material));
+            return false;
+        }
+        disallowedItems.remove(material);
+        return saveDisallowedItems();
+    }
+
+    /**
+     * Saves currently disallowed items.
+     *
+     * @return True if the save was successful, otherwise false.
+     */
+    private boolean saveDisallowedItems() {
+        List<Integer> itemIds = new ArrayList<Integer>();
+        for (Material item : disallowedItems) {
+            itemIds.add(item.getId());
+        }
+        config.setProperty(ConfigType.DISALLOWED_ITEM.key, itemIds);
+        return config.save();
+    }
+
+    /**
+     * Whether or not the specified item is allowed.
+     *
+     * @param item
+     *            Item to be checked. If null, returns false.
+     * @return True if the item is allowed, otherwise false.
+     */
+    public boolean isItemAllowed(Material item) {
+        return item != null && disallowedItems.contains(item);
+    }
+
     /**
      * Configuration types. Only lower case for this implementation.
      */
@@ -76,54 +210,6 @@ public class NoCraftConfig {
          */
         public static boolean isKeyUnderstood(String key) {
             return key != null && CONFIG_TYPE_MAP.containsKey(key.toLowerCase());
-        }
-    }
-
-    private final ArrayList<Material> disallowedItems = new ArrayList<Material>();
-
-    /**
-     * Creates a new NoCraftConfig based on the specified Bukkit configuration.
-     *
-     * @param config
-     *            Bukkit config on which properties are retrieved.
-     * @param log
-     *            Logger for this plugin.
-     */
-    public NoCraftConfig(Configuration config, Logger log) {
-        Map<String, ConfigurationNode> nodes = null;
-        if (config != null) {
-             nodes = config.getNodes("");
-        }
-        Set<String> keys;
-        if (nodes == null) {
-            log.info(LOG_DEFAULT_CONFIG);
-            keys = new HashSet<String>();
-        } else {
-            keys = config.getNodes(null).keySet();
-        }
-
-        for (String key : keys) {
-            if (!ConfigType.isKeyUnderstood(key)) {
-                log.warning(String.format(LOG_WARN_INVALID_KEY, key));
-            }
-        }
-        if (keys.contains(ConfigType.DISALLOWED_ITEM.key)) {
-            List<Integer> disallowedItemIds = config.getIntList(
-                    ConfigType.DISALLOWED_ITEM.key, new ArrayList<Integer>());
-            for (Integer disallowedItemId : disallowedItemIds) {
-                // Check for null
-                if (disallowedItemId == null) {
-                    log.warning(LOG_WARN_NULL_DISALLOWED_ITEM_ID);
-                } else {
-                    Material material = Material.getMaterial(disallowedItemId);
-                    // Check for bad item id
-                    if (material == null) {
-                        log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, disallowedItemId));
-                    } else {
-                        disallowedItems.add(material);
-                    }
-                }
-            }
         }
     }
 }

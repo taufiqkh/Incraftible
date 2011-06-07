@@ -1,6 +1,9 @@
 package com.quiptiq.nocraft;
 
-import java.util.HashSet;
+import static com.quiptiq.nocraft.Message.LOG_ITEM_CRAFT_ATTEMPT;
+import static com.quiptiq.nocraft.Message.PLAYER_MESSAGE_NOT_ALLOWED;
+
+import java.util.logging.Logger;
 
 import org.bukkit.Material;
 import org.bukkitcontrib.event.inventory.InventoryCraftEvent;
@@ -11,15 +14,18 @@ import org.bukkitcontrib.event.inventory.InventoryCraftEvent;
  * @author Taufiq Hoven
  */
 public class CraftEventHandler {
-    private HashSet<Material> disallowedCraftables;
+    private final Logger log = Logger.getLogger(NoCraft.DEFAULT_LOGGER);
+
+    private final NoCraftConfig config;
 
     /**
      * Creates a crafting event handler based on the given config.
      *
-     * @param config
+     * @param newConfig
      *            Configuration that determines how events are handled.
      */
-    public CraftEventHandler(NoCraftConfig config) {
+    public CraftEventHandler(NoCraftConfig newConfig) {
+        config = newConfig;
     }
 
     /**
@@ -32,9 +38,10 @@ public class CraftEventHandler {
      * @return True if the event is handled, false if it was not.
      */
     public boolean handleCraft(InventoryCraftEvent event, Material craftable) {
-        if (disallowedCraftables.contains(craftable)) {
-            event.getPlayer().chat("That item is not allowed!");
+        if (config.isItemAllowed(craftable)) {
+            event.getPlayer().sendMessage(PLAYER_MESSAGE_NOT_ALLOWED);
             event.setCancelled(true);
+            log.info(String.format(LOG_ITEM_CRAFT_ATTEMPT, event.getPlayer().getName(), craftable));
             return true;
         }
         return false;

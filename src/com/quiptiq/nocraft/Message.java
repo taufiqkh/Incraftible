@@ -40,7 +40,7 @@ public final class Message {
     /**
      * {@value}.
      */
-    public static final String LOG_WARN_INVALID_DISALLOWED_ITEM_ID = LOG_PREFIX + "Invalid disallowed item id %i";
+    public static final String LOG_WARN_INVALID_DISALLOWED_ITEM_ID = LOG_PREFIX + "Invalid disallowed item id %s";
 
     /**
      * {@value}.
@@ -57,4 +57,77 @@ public final class Message {
      * {@value}.
      */
     public static final String LOG_DEFAULT_CONFIG = LOG_PREFIX + "No config file detected, loading defaults.";
+
+    /**
+     * @{value}.
+     */
+    public static final String LOG_ITEM_DISALLOW_LIST = LOG_PREFIX + "Config file loaded, disallowed items are: %s";
+
+    /**
+     * @{value}.
+     */
+    public static final String LOG_ITEM_DISALLOW_NONE = LOG_PREFIX + "Config file loaded, no items are disallowed.";
+
+    /**
+     * @{value}.
+     */
+    public static final String LOG_ITEM_CRAFT_ATTEMPT = "Prevented player %s from crafting %s";
+
+    /**
+     * @{value}.
+     */
+    public static final String LOG_ENABLED = LOG_PREFIX + "Plugin enabled.";
+
+    /**
+     * @{value}.
+     */
+    public static final String LOG_DISABLED = LOG_PREFIX + "Plugin disabled";
+
+    /**
+     * @{value}.
+     */
+    public static final String VERSION = "0.1";
+
+    /**
+     * @{value}.
+     */
+    public static final String[] COMMAND_USAGE = {
+            "NoCraft " + VERSION + " by Taufiq Hoven",
+            "Type /nc help for usage information"
+    };
+
+    /**
+     * @{value}.
+     */
+    public static final String PLAYER_MESSAGE_ALLOW_USAGE = "Usage: /nc allow <itemNumber>";
+
+    /**
+     * @{value}.
+     */
+    public static final String PLAYER_MESSAGE_DISALLOW_USAGE = "Usage: /nc disallow <itemNumber>";
+
+    /**
+     * @{value}.
+     */
+    public static final String PLAYER_MESSAGE_ALLOW_SUCCESS = "Crafting of %s is now allowed.";
+
+    /**
+     * @{value}.
+     */
+    public static final String PLAYER_MESSAGE_DISALLOW_SUCCESS = "Crafting of %s is now disallowed.";
+
+    /**
+     * @{value}.
+     */
+    public static final String PLAYER_MESSAGE_COMMAND_FAIL = "Command failed! Possibly an error saving config.";
+
+    /**
+     * @{value}.
+     */
+    public static final String PLAYER_MESSAGE_BAD_ITEM_ID = "Bad item id: %s";
+
+    /**
+     * @{value}.
+     */
+    public static final String PLAYER_MESSAGE_NOT_ALLOWED = "You are not allowed to craft that item!";
 }
