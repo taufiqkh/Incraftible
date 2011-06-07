@@ -38,7 +38,7 @@ public class NoCraft extends JavaPlugin {
     public final void onEnable() {
         PluginManager pluginManager = getServer().getPluginManager();
         if (config == null) {
-            // enabled before loaded?
+            // Error in loading?
             log.warning(LOG_WARN_NO_CONFIG);
         } else if (pluginManager.getPlugin("BukkitContrib") == null) {
             log.warning(LOG_WARN_NO_BUKKITCONTRIB);

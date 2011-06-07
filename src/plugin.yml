@@ -1,0 +1,8 @@
+name: NoCraft
+version: 1.0
+author: Taufiq Hoven
+website: 
+main: com.quiptiq.nocraft.NoCraft
+description: Intercepts crafting events.
+softdepend: [BukkitContrib, LogBlock]
+commands:

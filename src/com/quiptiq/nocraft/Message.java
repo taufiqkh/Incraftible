@@ -25,7 +25,7 @@ public final class Message {
      * {@value}.
      */
     public static final String LOG_WARN_NO_CONFIG = LOG_PREFIX
-            + "Config has not been loaded. Plugin should be loaded before enabled.";
+            + "Config has not been loaded - plugin did not load correctly.";
 
     /**
      * {@value}.
@@ -52,4 +52,9 @@ public final class Message {
      * {@value}.
      */
     public static final String ENTER_TO_CONTINUE = LOG_PREFIX + "Please press Enter to continue.";
+
+    /**
+     * {@value}.
+     */
+    public static final String LOG_DEFAULT_CONFIG = LOG_PREFIX + "No config file detected, loading defaults.";
 }

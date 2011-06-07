@@ -1,5 +1,6 @@
 package com.quiptiq.nocraft;
 
+import static com.quiptiq.nocraft.Message.LOG_DEFAULT_CONFIG;
 import static com.quiptiq.nocraft.Message.LOG_WARN_INVALID_DISALLOWED_ITEM_ID;
 import static com.quiptiq.nocraft.Message.LOG_WARN_INVALID_KEY;
 import static com.quiptiq.nocraft.Message.LOG_WARN_NULL_DISALLOWED_ITEM_ID;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +17,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Material;
 import org.bukkit.util.config.Configuration;
+import org.bukkit.util.config.ConfigurationNode;
 
 /**
  * Configuration for NoCraft.
@@ -87,7 +90,17 @@ public class NoCraftConfig {
      *            Logger for this plugin.
      */
     public NoCraftConfig(Configuration config, Logger log) {
-        Set<String> keys = config.getNodes("").keySet();
+        Map<String, ConfigurationNode> nodes = null;
+        if (config != null) {
+             nodes = config.getNodes("");
+        }
+        Set<String> keys;
+        if (nodes == null) {
+            log.info(LOG_DEFAULT_CONFIG);
+            keys = new HashSet<String>();
+        } else {
+            keys = config.getNodes(null).keySet();
+        }
 
         for (String key : keys) {
             if (!ConfigType.isKeyUnderstood(key)) {
