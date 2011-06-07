@@ -202,6 +202,7 @@ public class NoCraftConfig {
          * @return True if the key is used and understood by the config,
          *         otherwise false.
          */
+        @SuppressWarnings("unused")
         public static boolean isKeyUnderstood(String key) {
             return key != null && CONFIG_TYPE_MAP.containsKey(key.toLowerCase());
         }

@@ -99,7 +99,9 @@ public final class Message {
      */
     public static final String[] COMMAND_USAGE = {
             "NoCraft " + VERSION + " by Taufiq Hoven",
-            "Type /nc help for usage information"
+            "/nc disallow <item number> Disallows crafting an item",
+            "/nc allow <item number>    Allows crafting an item",
+            "/nc list                   Lists all disallowed items"
     };
 
     /**
