@@ -30,6 +30,12 @@ public final class Message {
     /**
      * {@value}.
      */
+    public static final String LOG_WARN_NO_BUKKIT_CONFIG = LOG_PREFIX
+            + "Error loading file using Bukkit config.";
+
+    /**
+     * {@value}.
+     */
     public static final String LOG_WARN_INVALID_KEY = LOG_PREFIX + "Did not understand config key \"%s\"";
 
     /**
@@ -130,4 +136,14 @@ public final class Message {
      * @{value}.
      */
     public static final String PLAYER_MESSAGE_NOT_ALLOWED = "You are not allowed to craft that item!";
+
+    /**
+     * @{value}.
+     */
+    public static final String PLAYER_MESSAGE_LIST_NONE = "No items are currently disallowed from crafting.";
+
+    /**
+     * @{value}.
+     */
+    public static final String PLAYER_MESSAGE_LIST_HEADER = "The following items are disallowed:";
 }

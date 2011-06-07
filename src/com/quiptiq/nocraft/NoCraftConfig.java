@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 
 import org.bukkit.Material;
 import org.bukkit.util.config.Configuration;
-import org.bukkit.util.config.ConfigurationNode;
 
 /**
  * Configuration for NoCraft.
@@ -49,7 +48,7 @@ public class NoCraftConfig {
     }
 
     /**
-     * Loads configuration fropm the specified Bukkit configuration, discarding
+     * Loads configuration from the specified Bukkit configuration, discarding
      * any current settings.
      *
      * @param newConfig
@@ -57,43 +56,29 @@ public class NoCraftConfig {
      */
     public void loadConfig(Configuration newConfig) {
         config = newConfig;
-        Map<String, ConfigurationNode> nodes = null;
-        if (config != null) {
-            nodes = config.getNodes("");
-        }
-        Set<String> keys;
-        if (nodes == null) {
-            log.info(LOG_DEFAULT_CONFIG);
-            keys = new HashSet<String>();
-        } else {
-            keys = config.getNodes(null).keySet();
+        if (config == null) {
+            log.warning(LOG_WARN_NO_BUKKIT_CONFIG);
+            return;
         }
 
-        for (String key : keys) {
-            if (!ConfigType.isKeyUnderstood(key)) {
-                log.warning(String.format(LOG_WARN_INVALID_KEY, key));
-            }
-        }
         StringBuilder itemNames = new StringBuilder();
-        if (keys.contains(ConfigType.DISALLOWED_ITEM.key)) {
-            List<Integer> disallowedItemIds = config.getIntList(
-                    ConfigType.DISALLOWED_ITEM.key, new ArrayList<Integer>());
-            for (Integer disallowedItemId : disallowedItemIds) {
-                // Check for null
-                if (disallowedItemId == null) {
-                    log.warning(LOG_WARN_NULL_DISALLOWED_ITEM_ID);
+        List<Integer> disallowedItemIds = config.getIntList(
+                ConfigType.DISALLOWED_ITEM.key, new ArrayList<Integer>());
+        for (Integer disallowedItemId : disallowedItemIds) {
+            // Check for null
+            if (disallowedItemId == null) {
+                log.warning(LOG_WARN_NULL_DISALLOWED_ITEM_ID);
+            } else {
+                Material material = Material.getMaterial(disallowedItemId);
+                // Check for bad item id
+                if (material == null) {
+                    log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, disallowedItemId));
                 } else {
-                    Material material = Material.getMaterial(disallowedItemId);
-                    // Check for bad item id
-                    if (material == null) {
-                        log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, disallowedItemId));
-                    } else {
-                        disallowedItems.add(material);
-                        if (itemNames.length() > 0) {
-                            itemNames.append(ITEM_NAME_DELIMITER);
-                        }
-                        itemNames.append(material.name());
+                    disallowedItems.add(material);
+                    if (itemNames.length() > 0) {
+                        itemNames.append(ITEM_NAME_DELIMITER);
                     }
+                    itemNames.append(material.name());
                 }
             }
         }
@@ -160,6 +145,15 @@ public class NoCraftConfig {
      */
     public boolean isItemAllowed(Material item) {
         return item != null && disallowedItems.contains(item);
+    }
+
+    /**
+     * Returns a set of all currently disallowed items.
+     *
+     * @return  Set of all disallowed items.
+     */
+    public Set<Material> getDisallowedItems() {
+        return new HashSet<Material>(disallowedItems);
     }
 
     /**

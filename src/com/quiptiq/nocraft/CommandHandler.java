@@ -2,6 +2,7 @@ package com.quiptiq.nocraft;
 
 import static com.quiptiq.nocraft.Message.*;
 
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
@@ -23,6 +24,10 @@ public class CommandHandler implements CommandExecutor {
     private static final String SUBCOMMAND_ALLOW = "allow";
 
     private static final String SUBCOMMAND_DISALLOW = "disallow";
+
+    private static final String SUBCOMMAND_LIST = "list";
+
+    private static final int MAX_ITEMS_PER_LINE = 5;
 
     private final NoCraftConfig config;
 
@@ -79,6 +84,33 @@ public class CommandHandler implements CommandExecutor {
                 } else {
                     sender.sendMessage(PLAYER_MESSAGE_COMMAND_FAIL);
                 }
+            }
+        } else if (SUBCOMMAND_LIST.equalsIgnoreCase(args[0])) {
+            Set<Material> disallowedItems = config.getDisallowedItems();
+            if (disallowedItems.size() == 0) {
+                sender.sendMessage(PLAYER_MESSAGE_LIST_NONE);
+                return true;
+            }
+            // Iterate through, 5 items per line
+            StringBuilder itemList = new StringBuilder();
+            String delimiter = " ";
+            int itemsInRow = 0;
+            sender.sendMessage(PLAYER_MESSAGE_LIST_HEADER);
+            for (Material item : disallowedItems) {
+                // could be tighter, but it works
+                if (itemsInRow > 0) {
+                    itemList.append(delimiter);
+                }
+                itemList.append(item.toString());
+                itemsInRow++;
+                if (itemsInRow >= MAX_ITEMS_PER_LINE) {
+                    sender.sendMessage(itemList.toString());
+                    itemList.setLength(0);
+                    itemsInRow = 0;
+                }
+            }
+            if (itemsInRow > 0) {
+                sender.sendMessage(itemList.toString());
             }
         }
         return true;

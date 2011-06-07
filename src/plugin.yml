@@ -8,5 +8,8 @@ softdepend: [BukkitContrib, LogBlock]
 commands:
     nc:
         description: "NoCraft commands"
-        usage: "Usage: /nc allow|disallow <itemId>"
+        usage: |
+            /nc allow <itemId>
+            /nc disallow <itemId>
+            /nc list
         aliases: []

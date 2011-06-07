@@ -14,14 +14,18 @@ item ids of items that are not permitted to be crafted. For example, the followi
 
     disallowed:
     - 270
-    - 258
+    - 358
 
 Additionally, in-game commands can allow and disallow items. To disallow the crafting of maps:
 
-    /nc disallow 258
+    /nc disallow 358
 
 To allow it again:
 
-    /nc disallow 258
+    /nc disallow 358
+
+To list all currently disallowed items:
+
+    /nc list
 
 These commands can only be executed by an op. Also note that these commands are global, ie. not even an op can craft disallowed items, though they can of course allow them again.
