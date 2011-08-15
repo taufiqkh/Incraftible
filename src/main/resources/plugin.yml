@@ -4,7 +4,7 @@ author: Taufiq Hoven
 website: 
 main: com.quiptiq.nocraft.NoCraft
 description: Intercepts crafting events.
-softdepend: [BukkitContrib, LogBlock]
+softdepend: [Spout]
 commands:
     nc:
         description: "NoCraft commands"
