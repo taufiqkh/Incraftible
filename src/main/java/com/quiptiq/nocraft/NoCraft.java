@@ -47,9 +47,10 @@ public class NoCraft extends JavaPlugin {
         if (config == null) {
             // Error in loading?
             log.warning(LOG_WARN_NO_CONFIG);
-        } else if (pluginManager.getPlugin("BukkitContrib") == null) {
-            log.warning(LOG_WARN_NO_BUKKITCONTRIB);
         } else {
+            if (pluginManager.getPlugin("Spout") == null) {
+                log.warning(LOG_WARN_NO_BUKKITCONTRIB);
+            }
             getCommand(CommandHandler.COMMAND).setExecutor(new CommandHandler(config));
             pluginManager.registerEvent(
                     Type.CUSTOM_EVENT, new CraftEventListener(new CraftEventHandler(this.config)), Priority.Normal,

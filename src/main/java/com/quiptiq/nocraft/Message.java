@@ -41,11 +41,6 @@ public final class Message {
     /**
      * {@value}.
      */
-    public static final String LOG_WARN_NULL_DISALLOWED_ITEM_ID = LOG_PREFIX + "Null disallowed item id found";
-
-    /**
-     * {@value}.
-     */
     public static final String LOG_WARN_INVALID_DISALLOWED_ITEM_ID = LOG_PREFIX + "Invalid disallowed item id %s";
 
     /**

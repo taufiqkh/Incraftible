@@ -1,6 +1,6 @@
 package com.quiptiq.nocraft;
 
-import static com.quiptiq.nocraft.Message.*;
+import static com.quiptiq.nocraft.Message.LOG_WARN_NO_BUKKIT_CONFIG;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
 
 /**
@@ -26,10 +27,18 @@ import org.bukkit.util.config.Configuration;
  * @author Taufiq Hoven
  */
 public class NoCraftConfig {
-    /**
-     * Delimits item names in logs.
-     */
-    private static final String ITEM_NAME_DELIMITER = " ";
+
+    private static final String PERMISSION_PREFIX = "nocraft.craft.";
+
+    private static final Map<Material, String> PERMISSION_NAMES;
+
+    static {
+        HashMap<Material, String> permissionNames = new HashMap<Material, String>();
+        for (Material material : Material.values()) {
+            permissionNames.put(material, PERMISSION_PREFIX + material.toString().toLowerCase());
+        }
+        PERMISSION_NAMES = Collections.unmodifiableMap(permissionNames);
+    }
 
     private final Logger log = Logger.getLogger(NoCraft.DEFAULT_LOGGER);
 
@@ -61,32 +70,6 @@ public class NoCraftConfig {
             return;
         }
 
-        StringBuilder itemNames = new StringBuilder();
-        List<Integer> disallowedItemIds = config.getIntList(
-                ConfigType.DISALLOWED_ITEM.key, new ArrayList<Integer>());
-        for (Integer disallowedItemId : disallowedItemIds) {
-            // Check for null
-            if (disallowedItemId == null) {
-                log.warning(LOG_WARN_NULL_DISALLOWED_ITEM_ID);
-            } else {
-                Material material = Material.getMaterial(disallowedItemId);
-                // Check for bad item id
-                if (material == null) {
-                    log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, disallowedItemId));
-                } else {
-                    disallowedItems.add(material);
-                    if (itemNames.length() > 0) {
-                        itemNames.append(ITEM_NAME_DELIMITER);
-                    }
-                    itemNames.append(material.name());
-                }
-            }
-        }
-        if (disallowedItems.size() == 0) {
-            log.info(LOG_ITEM_DISALLOW_NONE);
-        } else {
-            log.info(String.format(LOG_ITEM_DISALLOW_LIST, itemNames.toString()));
-        }
     }
 
     /**
@@ -98,7 +81,7 @@ public class NoCraftConfig {
      */
     public boolean disallowItem(Material material) {
         if (material == null) {
-            log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, material));
+//            log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, material));
             return false;
         }
         disallowedItems.add(material);
@@ -115,7 +98,7 @@ public class NoCraftConfig {
      */
     public boolean allowItem(Material material) {
         if (material == null) {
-            log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, material));
+//            log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, material));
             return false;
         }
         disallowedItems.remove(material);
@@ -143,8 +126,8 @@ public class NoCraftConfig {
      *            Item to be checked. If null, returns false.
      * @return True if the item is allowed, otherwise false.
      */
-    public boolean isItemAllowed(Material item) {
-        return item != null && disallowedItems.contains(item);
+    public boolean isItemAllowed(Material item, Player player) {
+        return item != null && player.hasPermission(PERMISSION_NAMES.get(item));
     }
 
     /**

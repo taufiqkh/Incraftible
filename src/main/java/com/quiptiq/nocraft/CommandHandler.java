@@ -2,6 +2,9 @@ package com.quiptiq.nocraft;
 
 import static com.quiptiq.nocraft.Message.*;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -29,6 +32,33 @@ public class CommandHandler implements CommandExecutor {
 
     private static final int MAX_ITEMS_PER_LINE = 5;
 
+    /**
+     * Parent permission for NoCraft commands.
+     */
+    private static final String PERMISSION_COMMAND_PARENT = "nocraft.command";
+
+    /**
+     *
+     */
+    private static final String PERMISSION_COMMAND_ALL = PERMISSION_COMMAND_PARENT + ".*";
+
+    /**
+     * Map of commands to the permission that allows it.
+     */
+    private static final Map<String, String> COMMAND_PERMISSIONS;
+
+    /**
+     * Initialisation for command permissions.
+     */
+    static {
+        HashMap<String, String> permissions = new HashMap<String, String>();
+        String[] subCommands = {SUBCOMMAND_ALLOW, SUBCOMMAND_DISALLOW, SUBCOMMAND_LIST};
+        for (String subCommand : subCommands) {
+            permissions.put(subCommand, PERMISSION_COMMAND_PARENT + "." + subCommand);
+        }
+        COMMAND_PERMISSIONS = Collections.unmodifiableMap(permissions);
+    }
+
     private final NoCraftConfig config;
 
     private final Logger log = Logger.getLogger(NoCraft.DEFAULT_LOGGER);
@@ -49,13 +79,18 @@ public class CommandHandler implements CommandExecutor {
             return false;
         }
 
-        if (!sender.isOp()) {
-            sender.sendMessage("You don't have access to that command.");
-        } else if (args.length == 0) {
-            for (String message : COMMAND_USAGE) {
-                sender.sendMessage(message);
+        if (args.length == 0) {
+            for (String permissionName : COMMAND_PERMISSIONS.keySet()) {
+                if (sender.hasPermission(permissionName)) {
+                    for (String message : COMMAND_USAGE) {
+                        sender.sendMessage(message);
+                    }
+                    return true;
+                }
+                // No permissions, silently pass along
+                return false;
             }
-        } else if (SUBCOMMAND_DISALLOW.equalsIgnoreCase(args[0])) {
+        } else if (isSubCommandToExecute(SUBCOMMAND_DISALLOW, args[0], sender)) {
             if (args.length != 2) {
                 sender.sendMessage(PLAYER_MESSAGE_DISALLOW_USAGE);
                 return true;
@@ -70,7 +105,7 @@ public class CommandHandler implements CommandExecutor {
                     sender.sendMessage(PLAYER_MESSAGE_COMMAND_FAIL);
                 }
             }
-        } else if (SUBCOMMAND_ALLOW.equalsIgnoreCase(args[0])) {
+        } else if (isSubCommandToExecute(SUBCOMMAND_ALLOW, args[0], sender)) {
             if (args.length != 2) {
                 sender.sendMessage(PLAYER_MESSAGE_ALLOW_USAGE);
                 return true;
@@ -85,7 +120,7 @@ public class CommandHandler implements CommandExecutor {
                     sender.sendMessage(PLAYER_MESSAGE_COMMAND_FAIL);
                 }
             }
-        } else if (SUBCOMMAND_LIST.equalsIgnoreCase(args[0])) {
+        } else if (isSubCommandToExecute(SUBCOMMAND_LIST, args[0], sender)) {
             Set<Material> disallowedItems = config.getDisallowedItems();
             if (disallowedItems.size() == 0) {
                 sender.sendMessage(PLAYER_MESSAGE_LIST_NONE);
@@ -112,8 +147,23 @@ public class CommandHandler implements CommandExecutor {
             if (itemsInRow > 0) {
                 sender.sendMessage(itemList.toString());
             }
+        } else {
+            return false;
         }
         return true;
+    }
+
+    /**
+     * Given the specified argument and sender, determines whether the subcommand is to be executed.
+     * @param subCommand
+     * @param argument
+     * @param sender
+     * @return
+     */
+    private boolean isSubCommandToExecute(String subCommand, String argument, CommandSender sender) {
+        return subCommand.equalsIgnoreCase(argument) && (
+                sender.hasPermission(COMMAND_PERMISSIONS.get(subCommand))
+                || sender.hasPermission(PERMISSION_COMMAND_ALL));
     }
 
     /**
