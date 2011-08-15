@@ -6,7 +6,7 @@ import static com.quiptiq.nocraft.Message.PLAYER_MESSAGE_NOT_ALLOWED;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
-import org.bukkitcontrib.event.inventory.InventoryCraftEvent;
+import org.getspout.spoutapi.event.inventory.InventoryCraftEvent;
 
 /**
  * Handles crafting events as configured.

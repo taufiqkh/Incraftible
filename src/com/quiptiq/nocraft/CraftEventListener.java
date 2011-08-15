@@ -1,7 +1,7 @@
 package com.quiptiq.nocraft;
 
-import org.bukkitcontrib.event.inventory.InventoryCraftEvent;
-import org.bukkitcontrib.event.inventory.InventoryListener;
+import org.getspout.spoutapi.event.inventory.InventoryCraftEvent;
+import org.getspout.spoutapi.event.inventory.InventoryListener;
 
 /**
  * Simple listener for inventory crafting events.

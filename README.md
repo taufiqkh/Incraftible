@@ -29,3 +29,18 @@ To list all currently disallowed items:
     /nc list
 
 These commands can only be executed by an op. Also note that these commands are global, ie. not even an op can craft disallowed items, though they can of course allow them again.
+
+Dependencies
+------------
+NoCraft requires CraftBukkit and the Spout plugin.
+
+Development
+-----------
+NoCraft has been purpose-built for a specific server. Pull requests may be accepted depending on the features/fixes introduced, the quality of the code and tests and how much time I have.
+
+Compatibility
+-------------
+
+NoCraft has been tested with the following:
+- CraftBukkit #1000
+- Spout #17
