@@ -1,6 +1,6 @@
-package com.quiptiq.nocraft;
+package com.quiptiq.incraftible;
 
-import static com.quiptiq.nocraft.message.LogMessage.*;
+import static com.quiptiq.incraftible.message.FixedMessage.*;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,15 +14,15 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 /**
- * Handles NoCraft commands.
+ * Handles Incraftible commands.
  *
  * @author Taufiq Hoven
  */
 public class CommandHandler implements CommandExecutor {
     /**
-     * String for NoCraft commands.
+     * String for Incraftible commands.
      */
-    public static final String COMMAND = "nc";
+    public static final String COMMAND = "ic";
 
     private static final String SUBCOMMAND_ALLOW = "allow";
 
@@ -33,12 +33,12 @@ public class CommandHandler implements CommandExecutor {
     private static final int MAX_ITEMS_PER_LINE = 5;
 
     /**
-     * Parent permission for NoCraft commands.
+     * Parent permission for Incraftible commands.
      */
-    private static final String PERMISSION_COMMAND_PARENT = "nocraft.command";
+    private static final String PERMISSION_COMMAND_PARENT = IncraftibleConfig.PERMISSION_ROOT + ".command";
 
     /**
-     * Permission for all NoCraft commands.
+     * Permission for all Incraftible commands.
      */
     private static final String PERMISSION_COMMAND_ALL = PERMISSION_COMMAND_PARENT + ".*";
 
@@ -59,9 +59,9 @@ public class CommandHandler implements CommandExecutor {
         COMMAND_PERMISSIONS = Collections.unmodifiableMap(permissions);
     }
 
-    private final NoCraftConfig config;
+    private final IncraftibleConfig config;
 
-    private final Logger log = Logger.getLogger(NoCraft.DEFAULT_LOGGER);
+    private final Logger log = Logger.getLogger(Incraftible.DEFAULT_LOGGER);
 
     /**
      * Creates a new command handler with the specified configuration.
@@ -69,7 +69,7 @@ public class CommandHandler implements CommandExecutor {
      * @param newConfig
      *            Config to use.
      */
-    public CommandHandler(NoCraftConfig newConfig) {
+    public CommandHandler(IncraftibleConfig newConfig) {
         config = newConfig;
     }
 

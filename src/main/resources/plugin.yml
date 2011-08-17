@@ -1,650 +1,811 @@
-name: NoCraft
+name: Incraftible
 version: 0.1
 author: Taufiq Hoven
 website: 
-main: com.quiptiq.nocraft.NoCraft
+main: com.quiptiq.incraftible.Incraftible
 description: Intercepts crafting events.
 softdepend: [Spout]
 commands:
-    nc:
-        description: "NoCraft commands"
+    ic:
+        description: "Incraftible commands"
         usage: |
-            /nc allow <itemId>
-            /nc disallow <itemId>
-            /nc list
+            /ic allow <itemId>
+            /ic disallow <itemId>
+            /ic list
         aliases: []
 permissions:
-    nocraft.command.*:
-        description: Gives access to all nocraft commands.
+    incraftible.command.*:
+        description: Gives access to all incraftible commands.
+        default: op
         children:
-            nocraft.command.disallow:   true
-            nocraft.command.allow:      true
-            nocraft.command.list:       true
-    nocraft.command.disallow:
+            incraftible.command.disallow:   true
+            incraftible.command.allow:      true
+            incraftible.command.list:       true
+    incraftible.command.disallow:
         description: Allows access to the command that disallows crafting of items.
         default: op
-    nocraft.command.allow:
+    incraftible.command.allow:
         description: Allows access to the command that allows crafting of items.
         default: op
-    nocraft.command.list:
+    incraftible.command.list:
         description: Allows access to the command that lists disallowed items.
-        default: true
-    nocraft.craft.*:
+        default: op
+    incraftible.craft.*:
         description: Allows crafting of all items.
-        children:
-            nocraft.craft.unknown:  true
-    nocraft.craft.unknown:
-        description: Allows crafting of materials that are not recognised by NoCraft. This means that plugin updates will only be required for explicit control of these materials.
         default: false
-    nocraft.craft.air:
+        children:
+            incraftible.craft.unknown:  true
+    incraftible.craft.tools.*:
+        description: Allows crafting of all tools.
+        default: false
+        children:
+            incraftible.craft.tools.stone,*:    true
+            incraftible.craft.tools.gold.*: true
+            incraftible.craft.tools.iron.*: true
+            incraftible.craft.tools.diamond.*:  true
+    incraftible.craft.tools.wood.*:
+        description: Allows crafting of all wooden tools.
+        default: false
+        children:
+            incraftible.craft.wood_sword: true
+            incraftible.craft.wood_spade: true
+            incraftible.craft.wood_pickaxe: true
+            incraftible.craft.wood_axe: true
+    incraftible.craft.tools.stone.*:
+        description:    Allows crafting of stone tools.
+        default: false
+        children:
+            incraftible.craft.stone_sword:  true
+            incraftible.craft.stone_spade:  true
+            incraftible.craft.stone_pickaxe:    true
+            incraftible.craft.stone_axe:    true
+    incraftible.craft.tools.gold.*:
+        description:    Allows crafting of gold tools.
+        default: false
+        children:
+            incraftible.craft.gold_sword:  true
+            incraftible.craft.gold_spade:  true
+            incraftible.craft.gold_pickaxe:    true
+            incraftible.craft.gold_axe:    true
+    incraftible.craft.tools.iron.*:
+        description:    Allows crafting of iron tools.
+        default: false
+        children:
+            incraftible.craft.iron_sword:  true
+            incraftible.craft.iron_spade:  true
+            incraftible.craft.iron_pickaxe:    true
+            incraftible.craft.iron_axe:    true
+    incraftible.craft.tools.diamond.*:
+        description:    Allows crafting of diamond tools.
+        default: false
+        children:
+            incraftible.craft.diamond_sword:  true
+            incraftible.craft.diamond_spade:  true
+            incraftible.craft.diamond_pickaxe:    true
+            incraftible.craft.diamond_axe:    true
+    incraftible.craft.standard:
+        description: Allows crafting of all standard minecraft items.
+        default: false
+        children:
+            incraftible.craft.wood: true
+            incraftible.craft.dispenser: true
+            incraftible.craft.sandstone: true
+            incraftible.craft.note_block: true
+            incraftible.craft.powered_rail: true
+            incraftible.craft.detector_rail: true
+            incraftible.craft.piston_sticky_base: true
+            incraftible.craft.piston_base: true
+            incraftible.craft.wool: true
+            incraftible.craft.gold_block: true
+            incraftible.craft.iron_block: true
+            incraftible.craft.double_step: true
+            incraftible.craft.step: true
+            incraftible.craft.tnt: true
+            incraftible.craft.bookshelf: true
+            incraftible.craft.torch: true
+            incraftible.craft.wood_stairs: true
+            incraftible.craft.chest: true
+            incraftible.craft.diamond_block: true
+            incraftible.craft.workbench: true
+            incraftible.craft.furnace: true
+            incraftible.craft.sign_post: true
+            incraftible.craft.wooden_door: true
+            incraftible.craft.ladder: true
+            incraftible.craft.rails: true
+            incraftible.craft.cobblestone_stairs: true
+            incraftible.craft.lever: true
+            incraftible.craft.stone_plate: true
+            incraftible.craft.wood_plate: true
+            incraftible.craft.redstone_torch_on: true
+            incraftible.craft.stone_button: true
+            incraftible.craft.snow_block: true
+            incraftible.craft.jukebox: true
+            incraftible.craft.fence: true
+            incraftible.craft.glowstone: true
+            incraftible.craft.jack_o_lantern: true
+            incraftible.craft.trap_door: true
+            incraftible.craft.iron_spade: true
+            incraftible.craft.iron_pickaxe: true
+            incraftible.craft.iron_axe: true
+            incraftible.craft.flint_and_steel: true
+            incraftible.craft.bow: true
+            incraftible.craft.arrow: true
+            incraftible.craft.iron_sword: true
+            incraftible.craft.wood_sword: true
+            incraftible.craft.wood_spade: true
+            incraftible.craft.wood_pickaxe: true
+            incraftible.craft.wood_axe: true
+            incraftible.craft.stone_sword: true
+            incraftible.craft.stone_spade: true
+            incraftible.craft.stone_pickaxe: true
+            incraftible.craft.stone_axe: true
+            incraftible.craft.diamond_sword: true
+            incraftible.craft.diamond_spade: true
+            incraftible.craft.diamond_pickaxe: true
+            incraftible.craft.diamond_axe: true
+            incraftible.craft.stick: true
+            incraftible.craft.bowl: true
+            incraftible.craft.mushroom_soup: true
+            incraftible.craft.gold_sword: true
+            incraftible.craft.gold_spade: true
+            incraftible.craft.gold_pickaxe: true
+            incraftible.craft.gold_axe: true
+            incraftible.craft.wood_hoe: true
+            incraftible.craft.stone_hoe: true
+            incraftible.craft.iron_hoe: true
+            incraftible.craft.diamond_hoe: true
+            incraftible.craft.gold_hoe: true
+            incraftible.craft.bread: true
+            incraftible.craft.leather_helmet: true
+            incraftible.craft.leather_chestplate: true
+            incraftible.craft.leather_leggings: true
+            incraftible.craft.leather_boots: true
+            incraftible.craft.iron_helmet: true
+            incraftible.craft.iron_chestplate: true
+            incraftible.craft.iron_leggings: true
+            incraftible.craft.iron_boots: true
+            incraftible.craft.diamond_helmet: true
+            incraftible.craft.diamond_chestplate: true
+            incraftible.craft.diamond_leggings: true
+            incraftible.craft.diamond_boots: true
+            incraftible.craft.gold_helmet: true
+            incraftible.craft.gold_chestplate: true
+            incraftible.craft.gold_leggings: true
+            incraftible.craft.gold_boots: true
+            incraftible.craft.painting: true
+            incraftible.craft.golden_apple: true
+            incraftible.craft.sign: true
+            incraftible.craft.wood_door: true
+            incraftible.craft.bucket: true
+            incraftible.craft.minecart: true
+            incraftible.craft.iron_door: true
+            incraftible.craft.boat: true
+            incraftible.craft.paper: true
+            incraftible.craft.book: true
+            incraftible.craft.storage_minecart: true
+            incraftible.craft.powered_minecart: true
+            incraftible.craft.compass: true
+            incraftible.craft.fishing_rod: true
+            incraftible.craft.watch: true
+            incraftible.craft.sugar: true
+            incraftible.craft.cake: true
+            incraftible.craft.bed: true
+            incraftible.craft.diode: true
+            incraftible.craft.cookie: true
+            incraftible.craft.map: true
+            incraftible.craft.shears: true
+    incraftible.craft.unknown:
+        description: Allows crafting of materials that are not recognised by Incraftible. This means that plugin updates will only be required for explicit control of these materials.
+        default: false
+    incraftible.craft.air:
         description: Allows crafting of air.
         default: false
-    nocraft.craft.stone:
+    incraftible.craft.stone:
         description: Allows crafting of stone.
         default: false
-    nocraft.craft.grass:
+    incraftible.craft.grass:
         description: Allows crafting of grass.
         default: false
-    nocraft.craft.dirt:
+    incraftible.craft.dirt:
         description: Allows crafting of dirt.
         default: false
-    nocraft.craft.cobblestone:
+    incraftible.craft.cobblestone:
         description: Allows crafting of cobblestone.
         default: false
-    nocraft.craft.wood:
+    incraftible.craft.wood:
         description: Allows crafting of wood.
         default: false
-    nocraft.craft.sapling:
+    incraftible.craft.sapling:
         description: Allows crafting of saplings.
         default: false
-    nocraft.craft.bedrock:
+    incraftible.craft.bedrock:
         description: Allows crafting of bedrock.
         default: false
-    nocraft.craft.water:
+    incraftible.craft.water:
         description: Allows crafting of water.
         default: false
-    nocraft.craft.stationary_water:
+    incraftible.craft.stationary_water:
         description: Allows crafting of stationary water.
         default: false
-    nocraft.craft.lava:
+    incraftible.craft.lava:
         description: Allows crafting of lava.
         default: false
-    nocraft.craft.stationary_lava:
+    incraftible.craft.stationary_lava:
         description: Allows crafting of stationary lava.
         default: false
-    nocraft.craft.sand:
+    incraftible.craft.sand:
         description: Allows crafting of sand.
         default: false
-    nocraft.craft.gravel:
+    incraftible.craft.gravel:
         description: Allows crafting of gravel.
         default: false
-    nocraft.craft.gold_ore:
+    incraftible.craft.gold_ore:
         description: Allows crafting of gold_ore.
         default: false
-    nocraft.craft.iron_ore:
+    incraftible.craft.iron_ore:
         description: Allows crafting of iron ore.
         default: false
-    nocraft.craft.coal_ore:
+    incraftible.craft.coal_ore:
         description: Allows crafting of coal ore.
         default: false
-    nocraft.craft.log:
+    incraftible.craft.log:
         description: Allows crafting of logs.
         default: false
-    nocraft.craft.coal_ore:
+    incraftible.craft.coal_ore:
         description: Allows crafting of coal ore.
         default: false
-    nocraft.craft.leaves:
+    incraftible.craft.leaves:
         description: Allows crafting of leaves.
         default: false
-    nocraft.craft.sponge:
+    incraftible.craft.sponge:
         description: Allows crafting of sponge.
         default: false
-    nocraft.craft.glass:
+    incraftible.craft.glass:
         description: Allows crafting of glass.
         default: false
-    nocraft.craft.lapis_ore:
+    incraftible.craft.lapis_ore:
         description: Allows crafting of lapis ore.
         default: false
-    nocraft.craft.lapis_block:
+    incraftible.craft.lapis_block:
         description: Allows crafting of lapis blocks.
         default: false
-    nocraft.craft.dispenser:
+    incraftible.craft.dispenser:
         description: Allows crafting of dispensers.
         default: false
-    nocraft.craft.sandstone:
+    incraftible.craft.sandstone:
         description: Allows crafting of sandstone.
         default: false
-    nocraft.craft.note_block:
+    incraftible.craft.note_block:
         description: Allows crafting of note blocks.
         default: false
-    nocraft.craft.bed_block:
+    incraftible.craft.bed_block:
         description: Allows crafting of bed blocks.
         default: false
-    nocraft.craft.powered_rail:
+    incraftible.craft.powered_rail:
         description: Allows crafting of powered rails.
         default: false
-    nocraft.craft.detector_rail:
+    incraftible.craft.detector_rail:
         description: Allows crafting of detector rails.
         default: false
-    nocraft.craft.piston_sticky_base:
+    incraftible.craft.piston_sticky_base:
         description: Allows crafting of stick piston bases.
         default: false
-    nocraft.craft.web:
+    incraftible.craft.web:
         description: Allows crafting of cobwebs.
         default: false
-    nocraft.craft.long_grass:
+    incraftible.craft.long_grass:
         description: Allows crafting of long grass.
         default: false
-    nocraft.craft.dead_bush:
+    incraftible.craft.dead_bush:
         description: Allows crafting of dead bushes.
         default: false
-    nocraft.craft.piston_base:
+    incraftible.craft.piston_base:
         description: Allows crafting of piston bases.
         default: false
-    nocraft.craft.piston_extension:
+    incraftible.craft.piston_extension:
         description: Allows crafting of piston extensions.
         default: false
-    nocraft.craft.wool:
+    incraftible.craft.wool:
         description: Allows crafting of wool.
         default: false
-    nocraft.craft.piston_moving_piece:
+    incraftible.craft.piston_moving_piece:
         description: Allows crafting of piston moving pieces.
         default: false
-    nocraft.craft.yellow_flower:
+    incraftible.craft.yellow_flower:
         description: Allows crafting of pretty yellow flowers.
         default: false
-    nocraft.craft.red_rose:
+    incraftible.craft.red_rose:
         description: Allows crafting of red roses.
         default: false
-    nocraft.craft.brown_mushroom:
+    incraftible.craft.brown_mushroom:
         description: Allows crafting of brown mushrooms.
         default: false
-    nocraft.craft.red_mushroom:
+    incraftible.craft.red_mushroom:
         description: Allows crafting of red mushrooms.
         default: false
-    nocraft.craft.gold_block:
+    incraftible.craft.gold_block:
         description: Allows crafting of gold blocks.
         default: false
-    nocraft.craft.iron_block:
+    incraftible.craft.iron_block:
         description: Allows crafting of iron blocks.
         default: false
-    nocraft.craft.double_step:
+    incraftible.craft.double_step:
         description: Allows crafting of double steps.
         default: false
-    nocraft.craft.step:
+    incraftible.craft.step:
         description: Allows crafting of steps.
         default: false
-    nocraft.craft.brick:
+    incraftible.craft.brick:
         description: Allows crafting of bricks.
         default: false
-    nocraft.craft.tnt:
+    incraftible.craft.tnt:
         description: Allows crafting of tnt.
         default: false
-    nocraft.craft.bookshelf:
+    incraftible.craft.bookshelf:
         description: Allows crafting of bookshelves.
         default: false
-    nocraft.craft.mossy_cobblestone:
+    incraftible.craft.mossy_cobblestone:
         description: Allows crafting of mossy cobblestone.
         default: false
-    nocraft.craft.obsidian:
+    incraftible.craft.obsidian:
         description: Allows crafting of obsidian.
         default: false
-    nocraft.craft.torch:
+    incraftible.craft.torch:
         description: Allows crafting of torches.
         default: false
-    nocraft.craft.fire:
+    incraftible.craft.fire:
         description: Allows crafting of fire.
         default: false
-    nocraft.craft.mob_spawner:
+    incraftible.craft.mob_spawner:
         description: Allows crafting of mob spawners.
         default: false
-    nocraft.craft.wood_stairs:
+    incraftible.craft.wood_stairs:
         description: Allows crafting of wood stairs.
         default: false
-    nocraft.craft.chest:
+    incraftible.craft.chest:
         description: Allows crafting of chests.
         default: false
-    nocraft.craft.redstone_wire:
+    incraftible.craft.redstone_wire:
         description: Allows crafting of redstone wires.
         default: false
-    nocraft.craft.diamond_ore:
+    incraftible.craft.diamond_ore:
         description: Allows crafting of diamond ore.
         default: false
-    nocraft.craft.diamond_block:
+    incraftible.craft.diamond_block:
         description: Allows crafting of diamond blocks, you so rich.
         default: false
-    nocraft.craft.workbench:
+    incraftible.craft.workbench:
         description: Allows crafting of workbenches.
         default: false
-    nocraft.craft.crops:
+    incraftible.craft.crops:
         description: Allows crafting of crops.
         default: false
-    nocraft.craft.soil:
+    incraftible.craft.soil:
         description: Allows crafting of soil.
         default: false
-    nocraft.craft.furnace:
+    incraftible.craft.furnace:
         description: Allows crafting of furnaces.
         default: false
-    nocraft.craft.burning_furnace:
+    incraftible.craft.burning_furnace:
         description: Allows crafting of burning furnaces.
         default: false
-    nocraft.craft.sign_post:
+    incraftible.craft.sign_post:
         description: Allows crafting of sign posts.
         default: false
-    nocraft.craft.wooden_door:
+    incraftible.craft.wooden_door:
         description: Allows crafting of wooden doors.
         default: false
-    nocraft.craft.ladder:
+    incraftible.craft.ladder:
         description: Allows crafting of ladders.
         default: false
-    nocraft.craft.rails:
+    incraftible.craft.rails:
         description: Allows crafting of rails.
         default: false
-    nocraft.craft.cobblestone_stairs:
+    incraftible.craft.cobblestone_stairs:
         description: Allows crafting of cobblestone stairs.
         default: false
-    nocraft.craft.wall_sign:
+    incraftible.craft.wall_sign:
         description: Allows crafting of wall signs.
         default: false
-    nocraft.craft.lever:
+    incraftible.craft.lever:
         description: Allows crafting of levers.
         default: false
-    nocraft.craft.stone_plate:
+    incraftible.craft.stone_plate:
         description: Allows crafting of stone plates.
         default: false
-    nocraft.craft.iron_door_block:
+    incraftible.craft.iron_door_block:
         description: Allows crafting of iron door blocks.
         default: false
-    nocraft.craft.wood_plate:
+    incraftible.craft.wood_plate:
         description: Allows crafting of wood plates.
         default: false
-    nocraft.craft.redstone_ore:
+    incraftible.craft.redstone_ore:
         description: Allows crafting of redstone ore.
         default: false
-    nocraft.craft.glowing_redstone_ore:
+    incraftible.craft.glowing_redstone_ore:
         description: Allows crafting of glowing redstone ore.
         default: false
-    nocraft.craft.redstone_torch_off:
+    incraftible.craft.redstone_torch_off:
         description: Allows crafting of redstone torch off.
         default: false
-    nocraft.craft.redstone_torch_on:
+    incraftible.craft.redstone_torch_on:
         description: Allows crafting of redstone torch on.
         default: false
-    nocraft.craft.stone_button:
+    incraftible.craft.stone_button:
         description: Allows crafting of stone button.
         default: false
-    nocraft.craft.snow:
+    incraftible.craft.snow:
         description: Allows crafting of snow.
         default: false
-    nocraft.craft.ice:
+    incraftible.craft.ice:
         description: Allows crafting of ice.
         default: false
-    nocraft.craft.snow_block:
+    incraftible.craft.snow_block:
         description: Allows crafting of snow block.
         default: false
-    nocraft.craft.cactus:
+    incraftible.craft.cactus:
         description: Allows crafting of cactus.
         default: false
-    nocraft.craft.clay:
+    incraftible.craft.clay:
         description: Allows crafting of clay.
         default: false
-    nocraft.craft.sugar_cane_block:
+    incraftible.craft.sugar_cane_block:
         description: Allows crafting of sugar cane block.
         default: false
-    nocraft.craft.jukebox:
+    incraftible.craft.jukebox:
         description: Allows crafting of jukebox.
         default: false
-    nocraft.craft.fence:
+    incraftible.craft.fence:
         description: Allows crafting of fence.
         default: false
-    nocraft.craft.pumpkin:
+    incraftible.craft.pumpkin:
         description: Allows crafting of pumpkin.
         default: false
-    nocraft.craft.netherrack:
+    incraftible.craft.netherrack:
         description: Allows crafting of netherrack.
         default: false
-    nocraft.craft.soul_sand:
+    incraftible.craft.soul_sand:
         description: Allows crafting of soul sand.
         default: false
-    nocraft.craft.glowstone:
+    incraftible.craft.glowstone:
         description: Allows crafting of glowstone.
         default: false
-    nocraft.craft.portal:
+    incraftible.craft.portal:
         description: Allows crafting of portal.
         default: false
-    nocraft.craft.jack_o_lantern:
+    incraftible.craft.jack_o_lantern:
         description: Allows crafting of jack o lanterns.
         default: false
-    nocraft.craft.cake_block:
+    incraftible.craft.cake_block:
         description: Allows crafting of cake block.
         default: false
-    nocraft.craft.diode_block_off:
+    incraftible.craft.diode_block_off:
         description: Allows crafting of diode block off.
         default: false
-    nocraft.craft.diode_block_on:
+    incraftible.craft.diode_block_on:
         description: Allows crafting of diode block on.
         default: false
-    nocraft.craft.locked_chest:
+    incraftible.craft.locked_chest:
         description: Allows crafting of locked chests.
         default: false
-    nocraft.craft.trap_door:
+    incraftible.craft.trap_door:
         description: Allows crafting of trap doors.
         default: false
-    nocraft.craft.iron_spade:
+    incraftible.craft.iron_spade:
         description: Allows crafting of iron spades.
         default: false
-    nocraft.craft.iron_pickaxe:
+    incraftible.craft.iron_pickaxe:
         description: Allows crafting of iron pickaxes.
         default: false
-    nocraft.craft.iron_axe:
+    incraftible.craft.iron_axe:
         description: Allows crafting of iron axes.
         default: false
-    nocraft.craft.flint_and_steel:
+    incraftible.craft.flint_and_steel:
         description: Allows crafting of flint and steel.
         default: false
-    nocraft.craft.apple:
+    incraftible.craft.apple:
         description: Allows crafting of apples.
         default: false
-    nocraft.craft.bow:
+    incraftible.craft.bow:
         description: Allows crafting of bows.
         default: false
-    nocraft.craft.arrow:
+    incraftible.craft.arrow:
         description: Allows crafting of arrows.
         default: false
-    nocraft.craft.coal:
+    incraftible.craft.coal:
         description: Allows crafting of coal.
         default: false
-    nocraft.craft.diamond:
+    incraftible.craft.diamond:
         description: Allows crafting of diamonds.
         default: false
-    nocraft.craft.iron_ingot:
+    incraftible.craft.iron_ingot:
         description: Allows crafting of iron ingots.
         default: false
-    nocraft.craft.gold_ingot:
+    incraftible.craft.gold_ingot:
         description: Allows crafting of gold ingots.
         default: false
-    nocraft.craft.iron_sword:
+    incraftible.craft.iron_sword:
         description: Allows crafting of iron swords.
         default: false
-    nocraft.craft.wood_sword:
+    incraftible.craft.wood_sword:
         description: Allows crafting of wood swords.
         default: false
-    nocraft.craft.wood_spade:
+    incraftible.craft.wood_spade:
         description: Allows crafting of wood spades.
         default: false
-    nocraft.craft.wood_pickaxe:
+    incraftible.craft.wood_pickaxe:
         description: Allows crafting of wood pickaxes.
         default: false
-    nocraft.craft.wood_axe:
+    incraftible.craft.wood_axe:
         description: Allows crafting of wood axes.
         default: false
-    nocraft.craft.stone_sword:
+    incraftible.craft.stone_sword:
         description: Allows crafting of stone swords.
         default: false
-    nocraft.craft.stone_spade:
+    incraftible.craft.stone_spade:
         description: Allows crafting of stone spades.
         default: false
-    nocraft.craft.stone_pickaxe:
+    incraftible.craft.stone_pickaxe:
         description: Allows crafting of stone pickaxes.
         default: false
-    nocraft.craft.stone_axe:
+    incraftible.craft.stone_axe:
         description: Allows crafting of stone axes.
         default: false
-    nocraft.craft.diamond_sword:
+    incraftible.craft.diamond_sword:
         description: Allows crafting of diamond swords.
         default: false
-    nocraft.craft.diamond_spade:
+    incraftible.craft.diamond_spade:
         description: Allows crafting of diamond spades.
         default: false
-    nocraft.craft.diamond_pickaxe:
+    incraftible.craft.diamond_pickaxe:
         description: Allows crafting of diamond pickaxes.
         default: false
-    nocraft.craft.diamond_axe:
+    incraftible.craft.diamond_axe:
         description: Allows crafting of diamond axes.
         default: false
-    nocraft.craft.stick:
+    incraftible.craft.stick:
         description: Allows crafting of sticks.
         default: false
-    nocraft.craft.bowl:
+    incraftible.craft.bowl:
         description: Allows crafting of bowls.
         default: false
-    nocraft.craft.mushroom_soup:
+    incraftible.craft.mushroom_soup:
         description: Allows crafting of mushroom soup.
         default: false
-    nocraft.craft.gold_sword:
+    incraftible.craft.gold_sword:
         description: Allows crafting of gold swords.
         default: false
-    nocraft.craft.gold_spade:
+    incraftible.craft.gold_spade:
         description: Allows crafting of gold spades.
         default: false
-    nocraft.craft.gold_pickaxe:
+    incraftible.craft.gold_pickaxe:
         description: Allows crafting of gold pickaxes.
         default: false
-    nocraft.craft.gold_axe:
+    incraftible.craft.gold_axe:
         description: Allows crafting of gold axes.
         default: false
-    nocraft.craft.string:
+    incraftible.craft.string:
         description: Allows crafting of string.
         default: false
-    nocraft.craft.feather:
+    incraftible.craft.feather:
         description: Allows crafting of feathers.
         default: false
-    nocraft.craft.sulphur:
+    incraftible.craft.sulphur:
         description: Allows crafting of sulphur.
         default: false
-    nocraft.craft.wood_hoe:
+    incraftible.craft.wood_hoe:
         description: Allows crafting of wood hoes.
         default: false
-    nocraft.craft.stone_hoe:
+    incraftible.craft.stone_hoe:
         description: Allows crafting of stone hoes.
         default: false
-    nocraft.craft.iron_hoe:
+    incraftible.craft.iron_hoe:
         description: Allows crafting of iron hoes.
         default: false
-    nocraft.craft.diamond_hoe:
+    incraftible.craft.diamond_hoe:
         description: Allows crafting of diamond hoes.
         default: false
-    nocraft.craft.gold_hoe:
+    incraftible.craft.gold_hoe:
         description: Allows crafting of gold hoes.
         default: false
-    nocraft.craft.seeds:
+    incraftible.craft.seeds:
         description: Allows crafting of seeds.
         default: false
-    nocraft.craft.wheat:
+    incraftible.craft.wheat:
         description: Allows crafting of wheat.
         default: false
-    nocraft.craft.bread:
+    incraftible.craft.bread:
         description: Allows crafting of bread.
         default: false
-    nocraft.craft.leather_helmet:
+    incraftible.craft.leather_helmet:
         description: Allows crafting of leather helmets.
         default: false
-    nocraft.craft.leather_chestplate:
+    incraftible.craft.leather_chestplate:
         description: Allows crafting of leather chestplates.
         default: false
-    nocraft.craft.leather_leggings:
+    incraftible.craft.leather_leggings:
         description: Allows crafting of leather leggings.
         default: false
-    nocraft.craft.leather_boots:
+    incraftible.craft.leather_boots:
         description: Allows crafting of leather boots.
         default: false
-    nocraft.craft.chainmail_helmet:
+    incraftible.craft.chainmail_helmet:
         description: Allows crafting of chainmail helmets.
         default: false
-    nocraft.craft.chainmail_chestplate:
+    incraftible.craft.chainmail_chestplate:
         description: Allows crafting of chainmail chestplates.
         default: false
-    nocraft.craft.chainmail_leggings:
+    incraftible.craft.chainmail_leggings:
         description: Allows crafting of chainmail leggings.
         default: false
-    nocraft.craft.chainmail_boots:
+    incraftible.craft.chainmail_boots:
         description: Allows crafting of chainmail boots.
         default: false
-    nocraft.craft.iron_helmet:
+    incraftible.craft.iron_helmet:
         description: Allows crafting of iron helmets.
         default: false
-    nocraft.craft.iron_chestplate:
+    incraftible.craft.iron_chestplate:
         description: Allows crafting of iron chestplates.
         default: false
-    nocraft.craft.iron_leggings:
+    incraftible.craft.iron_leggings:
         description: Allows crafting of iron leggings.
         default: false
-    nocraft.craft.iron_boots:
+    incraftible.craft.iron_boots:
         description: Allows crafting of iron boots.
         default: false
-    nocraft.craft.diamond_helmet:
+    incraftible.craft.diamond_helmet:
         description: Allows crafting of diamond helmets.
         default: false
-    nocraft.craft.diamond_chestplate:
+    incraftible.craft.diamond_chestplate:
         description: Allows crafting of diamond chestplates.
         default: false
-    nocraft.craft.diamond_leggings:
+    incraftible.craft.diamond_leggings:
         description: Allows crafting of diamond leggings.
         default: false
-    nocraft.craft.diamond_boots:
+    incraftible.craft.diamond_boots:
         description: Allows crafting of diamond boots.
         default: false
-    nocraft.craft.gold_helmet:
+    incraftible.craft.gold_helmet:
         description: Allows crafting of gold helmets.
         default: false
-    nocraft.craft.gold_chestplate:
+    incraftible.craft.gold_chestplate:
         description: Allows crafting of gold chestplates.
         default: false
-    nocraft.craft.gold_leggings:
+    incraftible.craft.gold_leggings:
         description: Allows crafting of gold leggings.
         default: false
-    nocraft.craft.gold_boots:
+    incraftible.craft.gold_boots:
         description: Allows crafting of gold boots.
         default: false
-    nocraft.craft.flint:
+    incraftible.craft.flint:
         description: Allows crafting of flint.
         default: false
-    nocraft.craft.pork:
+    incraftible.craft.pork:
         description: Allows crafting of pork.
         default: false
-    nocraft.craft.grilled_pork:
+    incraftible.craft.grilled_pork:
         description: Allows crafting of grilled pork.
         default: false
-    nocraft.craft.painting:
+    incraftible.craft.painting:
         description: Allows crafting of paintings.
         default: false
-    nocraft.craft.golden_apple:
+    incraftible.craft.golden_apple:
         description: Allows crafting of golden apples.
         default: false
-    nocraft.craft.sign:
+    incraftible.craft.sign:
         description: Allows crafting of signs.
         default: false
-    nocraft.craft.wood_door:
+    incraftible.craft.wood_door:
         description: Allows crafting of wood doors.
         default: false
-    nocraft.craft.bucket:
+    incraftible.craft.bucket:
         description: Allows crafting of buckets.
         default: false
-    nocraft.craft.water_bucket:
+    incraftible.craft.water_bucket:
         description: Allows crafting of water buckets.
         default: false
-    nocraft.craft.lava_bucket:
+    incraftible.craft.lava_bucket:
         description: Allows crafting of lava buckets.
         default: false
-    nocraft.craft.minecart:
+    incraftible.craft.minecart:
         description: Allows crafting of minecarts.
         default: false
-    nocraft.craft.saddle:
+    incraftible.craft.saddle:
         description: Allows crafting of saddles.
         default: false
-    nocraft.craft.iron_door:
+    incraftible.craft.iron_door:
         description: Allows crafting of iron doors.
         default: false
-    nocraft.craft.redstone:
+    incraftible.craft.redstone:
         description: Allows crafting of redstone.
         default: false
-    nocraft.craft.snow_ball:
+    incraftible.craft.snow_ball:
         description: Allows crafting of snow balls.
         default: false
-    nocraft.craft.boat:
+    incraftible.craft.boat:
         description: Allows crafting of boats.
         default: false
-    nocraft.craft.leather:
+    incraftible.craft.leather:
         description: Allows crafting of leather.
         default: false
-    nocraft.craft.milk_bucket:
+    incraftible.craft.milk_bucket:
         description: Allows crafting of milk buckets.
         default: false
-    nocraft.craft.clay_brick:
+    incraftible.craft.clay_brick:
         description: Allows crafting of clay bricks.
         default: false
-    nocraft.craft.clay_ball:
+    incraftible.craft.clay_ball:
         description: Allows crafting of clay balls.
         default: false
-    nocraft.craft.sugar_cane:
+    incraftible.craft.sugar_cane:
         description: Allows crafting of sugar cane.
         default: false
-    nocraft.craft.paper:
+    incraftible.craft.paper:
         description: Allows crafting of paper.
         default: false
-    nocraft.craft.book:
+    incraftible.craft.book:
         description: Allows crafting of books.
         default: false
-    nocraft.craft.slime_ball:
+    incraftible.craft.slime_ball:
         description: Allows crafting of slime balls.
         default: false
-    nocraft.craft.storage_minecart:
+    incraftible.craft.storage_minecart:
         description: Allows crafting of storage minecarts.
         default: false
-    nocraft.craft.powered_minecart:
+    incraftible.craft.powered_minecart:
         description: Allows crafting of powered minecarts.
         default: false
-    nocraft.craft.egg:
+    incraftible.craft.egg:
         description: Allows crafting of eggs.
         default: false
-    nocraft.craft.compass:
+    incraftible.craft.compass:
         description: Allows crafting of compasses.
         default: false
-    nocraft.craft.fishing_rod:
+    incraftible.craft.fishing_rod:
         description: Allows crafting of fishing rods.
         default: false
-    nocraft.craft.watch:
+    incraftible.craft.watch:
         description: Allows crafting of watches.
         default: false
-    nocraft.craft.glowstone_dust:
+    incraftible.craft.glowstone_dust:
         description: Allows crafting of glowstone dust.
         default: false
-    nocraft.craft.raw_fish:
+    incraftible.craft.raw_fish:
         description: Allows crafting of raw fish.
         default: false
-    nocraft.craft.cooked_fish:
+    incraftible.craft.cooked_fish:
         description: Allows crafting of cooked fish.
         default: false
-    nocraft.craft.ink_sack:
+    incraftible.craft.ink_sack:
         description: Allows crafting of ink sacs. Misspelled in Bukkit so we're left with ink_sack.
         default: false
-    nocraft.craft.bone:
+    incraftible.craft.bone:
         description: Allows crafting of bone.
         default: false
-    nocraft.craft.sugar:
+    incraftible.craft.sugar:
         description: Allows crafting of sugar.
         default: false
-    nocraft.craft.cake:
+    incraftible.craft.cake:
         description: Allows crafting of cakes.
         default: false
-    nocraft.craft.bed:
+    incraftible.craft.bed:
         description: Allows crafting of beds.
         default: false
-    nocraft.craft.diode:
+    incraftible.craft.diode:
         description: Allows crafting of diodes.
         default: false
-    nocraft.craft.cookie:
+    incraftible.craft.cookie:
         description: Allows crafting of cookies, yum.
         default: false
-    nocraft.craft.map:
+    incraftible.craft.map:
         description: Allows crafting of maps.
         default: false
-    nocraft.craft.shears:
+    incraftible.craft.shears:
         description: Allows crafting of shears.
         default: false
-    nocraft.craft.gold_record:
+    incraftible.craft.gold_record:
         description: Allows crafting of gold records.
         default: false
-    nocraft.craft.green_record;:
+    incraftible.craft.green_record;:
         description: Allows crafting of green records.
         default: false

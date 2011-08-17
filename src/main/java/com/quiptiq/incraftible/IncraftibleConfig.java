@@ -1,6 +1,6 @@
-package com.quiptiq.nocraft;
+package com.quiptiq.incraftible;
 
-import static com.quiptiq.nocraft.message.LogMessage.LOG_PREFIX;
+import static com.quiptiq.incraftible.message.FixedMessage.LOG_PREFIX;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,10 +21,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
 
-import com.quiptiq.nocraft.message.Message;
+import com.quiptiq.incraftible.message.Message;
 
 /**
- * Configuration for NoCraft.
+ * Configuration for Incraftible.
  *
  * <p>
  * NOTE:
@@ -33,7 +33,7 @@ import com.quiptiq.nocraft.message.Message;
  *
  * @author Taufiq Hoven
  */
-public class NoCraftConfig {
+public class IncraftibleConfig {
 
     private static final String CONFIG_FILENAME = "config.yml";
 
@@ -49,9 +49,14 @@ public class NoCraftConfig {
     private static final String LOG_WARN_CLOSE_FILE_WRITER = LOG_PREFIX + "Couldn't close file writer";
 
     /**
-     * Prefix for NoCraft crafting permissions.
+     * Root node for all incraftible permissions.
      */
-    private static final String PERMISSION_PREFIX = "nocraft.craft.";
+    public static final String PERMISSION_ROOT = "incraftible";
+
+    /**
+     * Prefix for Incraftible crafting permissions.
+     */
+    private static final String PERMISSION_PREFIX = PERMISSION_ROOT + ".craft.";
 
     /**
      * Map from each material to the permission that controls its crafting.
@@ -66,19 +71,19 @@ public class NoCraftConfig {
         PERMISSION_NAMES = Collections.unmodifiableMap(permissionNames);
     }
 
-    private final Logger log = Logger.getLogger(NoCraft.DEFAULT_LOGGER);
+    private final Logger log = Logger.getLogger(Incraftible.DEFAULT_LOGGER);
 
     private Configuration config;
 
     private final HashSet<Material> disallowedItems = new HashSet<Material>();
 
     /**
-     * Creates a new NoCraftConfig based on the specified Bukkit configuration.
+     * Creates a new IncraftibleConfig based on the specified Bukkit configuration.
      *
      * @param newConfig
      *            Bukkit config on which properties are retrieved.
      */
-    public NoCraftConfig(NoCraft plugin, File pluginFile) {
+    public IncraftibleConfig(Incraftible plugin, File pluginFile) {
         loadConfig(plugin, pluginFile);
     }
 
@@ -89,7 +94,7 @@ public class NoCraftConfig {
      * @param newConfig
      *            Bukkit config on which properties are retrieved.
      */
-    public void loadConfig(NoCraft plugin, File pluginFile) {
+    public void loadConfig(Incraftible plugin, File pluginFile) {
         // Check for existing config file
         File configFile = new File(plugin.getDataFolder(), CONFIG_FILENAME);
         if (!configFile.exists()) {
@@ -118,8 +123,8 @@ public class NoCraftConfig {
      *            File that will contain the config.
      * @return
      */
-    private Configuration loadDefaultConfig(NoCraft plugin, File pluginFile, File configFile) {
-        // Use the default that is packaged in the NoCraft jar
+    private Configuration loadDefaultConfig(Incraftible plugin, File pluginFile, File configFile) {
+        // Use the default that is packaged in the Incraftible jar
         String nextLine = null;
         FileWriter writer = null;
         BufferedReader reader = null;
@@ -127,6 +132,8 @@ public class NoCraftConfig {
             log.warning(String.format(LOG_WARN_FAILED_CREATING_CONFIG_DIRECTORY, configFile.getPath()));
             return null;
         }
+
+
         try {
             JarFile jar = new JarFile(pluginFile);
             reader = new BufferedReader(new InputStreamReader(jar.getInputStream(jar.getJarEntry(CONFIG_FILENAME))));

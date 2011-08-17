@@ -1,9 +1,9 @@
-package com.quiptiq.nocraft;
+package com.quiptiq.incraftible;
 
-import static com.quiptiq.nocraft.message.LogMessage.LOG_DISABLED;
-import static com.quiptiq.nocraft.message.LogMessage.LOG_ENABLED;
-import static com.quiptiq.nocraft.message.LogMessage.LOG_WARN_NO_CONFIG;
-import static com.quiptiq.nocraft.message.LogMessage.LOG_WARN_NO_SPOUT;
+import static com.quiptiq.incraftible.message.FixedMessage.LOG_DISABLED;
+import static com.quiptiq.incraftible.message.FixedMessage.LOG_ENABLED;
+import static com.quiptiq.incraftible.message.FixedMessage.LOG_WARN_NO_CONFIG;
+import static com.quiptiq.incraftible.message.FixedMessage.LOG_WARN_NO_SPOUT;
 
 import java.util.logging.Logger;
 
@@ -18,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author Taufiq Hoven
  * @version 0.1
  */
-public class NoCraft extends JavaPlugin {
+public class Incraftible extends JavaPlugin {
 
     /**
      * Name of the default logger.
@@ -27,12 +27,12 @@ public class NoCraft extends JavaPlugin {
 
     private Logger log;
 
-    private NoCraftConfig config;
+    private IncraftibleConfig config;
 
     @Override
     public final void onLoad() {
         log = getServer().getLogger();
-        this.config = new NoCraftConfig(this, this.getFile());
+        this.config = new IncraftibleConfig(this, this.getFile());
         super.onLoad();
     }
 

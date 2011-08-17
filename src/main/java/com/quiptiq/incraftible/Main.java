@@ -1,7 +1,7 @@
-package com.quiptiq.nocraft;
+package com.quiptiq.incraftible;
 
-import static com.quiptiq.nocraft.message.LogMessage.ENTER_TO_CONTINUE;
-import static com.quiptiq.nocraft.message.LogMessage.USAGE;
+import static com.quiptiq.incraftible.message.FixedMessage.ENTER_TO_CONTINUE;
+import static com.quiptiq.incraftible.message.FixedMessage.USAGE;
 
 import java.io.IOException;
 

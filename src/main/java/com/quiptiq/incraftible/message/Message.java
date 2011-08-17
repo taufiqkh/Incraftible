@@ -1,4 +1,4 @@
-package com.quiptiq.nocraft.message;
+package com.quiptiq.incraftible.message;
 
 import java.util.Collections;
 import java.util.HashMap;

@@ -1,5 +1,5 @@
-NoCraft
-=======
+Incraftible
+===========
 
 A [Minecraft](http://www.minecraft.net/) [Bukkit](http://bukkit.org/) plugin to prevent crafting of specified items. Configurable via the command line or config file.
 
@@ -9,38 +9,41 @@ more comprehensive permissions plugins (eg. WorldGuard) to fill the gap, and thi
 Configuration
 -------------
 
-Configuration is via a yml file in the plugins/NoCraft subdirectory of the minecraft server. There is currently only one option, `disallowed`, which specifies the
+Configuration is via a yml file in the plugins/Incraftible subdirectory of the minecraft server. There is currently only one option, `disallowed`, which specifies the
 item ids of items that are not permitted to be crafted. For example, the following prevents the crafting of wooden picks and maps, respectively:
 
     disallowed:
     - 270
     - 358
 
-Additionally, in-game commands can allow and disallow items. To disallow the crafting of maps:
-
-    /nc disallow 358
-
-To allow it again:
-
-    /nc disallow 358
-
-To list all currently disallowed items:
-
-    /nc list
-
-These commands can only be executed by an op. Also note that these commands are global, ie. not even an op can craft disallowed items, though they can of course allow them again.
-
 Dependencies
 ------------
-NoCraft requires CraftBukkit and the Spout plugin.
+Incraftible requires CraftBukkit and the Spout plugin.
 
 Development
 -----------
-NoCraft has been purpose-built for a specific server. Pull requests may be accepted depending on the features/fixes introduced, the quality of the code and tests and how much time I have.
+Incraftible has been purpose-built for a specific server. Pull requests may be accepted depending on the features/fixes introduced, the quality of the code and tests and how much time I have.
 
 Compatibility
 -------------
 
-NoCraft has been tested with the following:
-- CraftBukkit #1000
-- Spout #17
+Incraftible has been tested with the following:
+
+* CraftBukkit #1060
+* Spout #121
+
+Planned Features
+----------------
+In-game commands are planned to allow and disallow items. To disallow the crafting of maps:
+
+    /ic disallow 358
+
+To allow it again:
+
+    /ic disallow 358
+
+To list all currently disallowed items:
+
+    /ic list
+
+Note that these commands are NOT YET IMPLEMENTED.

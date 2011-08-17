@@ -1,13 +1,13 @@
-package com.quiptiq.nocraft;
+package com.quiptiq.incraftible;
 
-import static com.quiptiq.nocraft.message.LogMessage.LOG_ITEM_CRAFT_ATTEMPT;
+import static com.quiptiq.incraftible.message.FixedMessage.LOG_ITEM_CRAFT_ATTEMPT;
 
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
 import org.getspout.spoutapi.event.inventory.InventoryCraftEvent;
 
-import com.quiptiq.nocraft.message.Message;
+import com.quiptiq.incraftible.message.Message;
 
 /**
  * Handles crafting events as configured.
@@ -15,9 +15,9 @@ import com.quiptiq.nocraft.message.Message;
  * @author Taufiq Hoven
  */
 public class CraftEventHandler {
-    private final Logger log = Logger.getLogger(NoCraft.DEFAULT_LOGGER);
+    private final Logger log = Logger.getLogger(Incraftible.DEFAULT_LOGGER);
 
-    private final NoCraftConfig config;
+    private final IncraftibleConfig config;
 
     /**
      * Creates a crafting event handler based on the given config.
@@ -25,7 +25,7 @@ public class CraftEventHandler {
      * @param newConfig
      *            Configuration that determines how events are handled.
      */
-    public CraftEventHandler(NoCraftConfig newConfig) {
+    public CraftEventHandler(IncraftibleConfig newConfig) {
         config = newConfig;
     }
 

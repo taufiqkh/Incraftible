@@ -1,4 +1,4 @@
-package com.quiptiq.nocraft;
+package com.quiptiq.incraftible;
 
 import org.getspout.spoutapi.event.inventory.InventoryCraftEvent;
 import org.getspout.spoutapi.event.inventory.InventoryListener;

@@ -1,19 +1,19 @@
-package com.quiptiq.nocraft.message;
+package com.quiptiq.incraftible.message;
 
 /**
- * Dumping ground for log message constants.
+ * Dumping ground for message constants.
  */
-public final class LogMessage {
+public final class FixedMessage {
     /**
      * Private constructor.
      */
-    private LogMessage() {
+    private FixedMessage() {
     }
 
     /**
      * {@value}.
      */
-    public static final String LOG_PREFIX = "[NoCraft] ";
+    public static final String LOG_PREFIX = "[Incraftible] ";
 
     /**
      * {@value}.
@@ -88,7 +88,7 @@ public final class LogMessage {
      * @{value}.
      */
     public static final String[] COMMAND_USAGE = {
-            "NoCraft " + VERSION + " by Taufiq Hoven",
+            "Incraftible " + VERSION + " by Taufiq Hoven",
             "/nc disallow <item number> Disallows crafting an item",
             "/nc allow <item number>    Allows crafting an item",
             "/nc list                   Lists all disallowed items"
