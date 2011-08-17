@@ -13,8 +13,6 @@ commands:
             /nc disallow <itemId>
             /nc list
         aliases: []
-messages:
-    PermissionsBukkit
 permissions:
     nocraft.command.*:
         description: Gives access to all nocraft commands.

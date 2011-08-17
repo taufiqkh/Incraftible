@@ -1,12 +1,13 @@
 package com.quiptiq.nocraft;
 
-import static com.quiptiq.nocraft.Message.LOG_ITEM_CRAFT_ATTEMPT;
-import static com.quiptiq.nocraft.Message.PLAYER_MESSAGE_NOT_ALLOWED;
+import static com.quiptiq.nocraft.message.LogMessage.LOG_ITEM_CRAFT_ATTEMPT;
 
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
 import org.getspout.spoutapi.event.inventory.InventoryCraftEvent;
+
+import com.quiptiq.nocraft.message.Message;
 
 /**
  * Handles crafting events as configured.
@@ -38,8 +39,8 @@ public class CraftEventHandler {
      * @return True if the event is handled, false if it was not.
      */
     public boolean handleCraft(InventoryCraftEvent event, Material craftable) {
-        if (config.isItemAllowed(craftable, event.getPlayer())) {
-            event.getPlayer().sendMessage(PLAYER_MESSAGE_NOT_ALLOWED);
+        if (!config.isItemAllowed(craftable, event.getPlayer())) {
+            event.getPlayer().sendMessage(Message.PLAYER_MESSAGE_DISALLOWED.prepareMessage(craftable));
             event.setCancelled(true);
             log.info(String.format(LOG_ITEM_CRAFT_ATTEMPT, event.getPlayer().getName(), craftable));
             return true;

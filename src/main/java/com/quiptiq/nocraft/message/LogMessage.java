@@ -1,13 +1,13 @@
-package com.quiptiq.nocraft;
+package com.quiptiq.nocraft.message;
 
 /**
- * Dumping ground for message constants.
+ * Dumping ground for log message constants.
  */
-public final class Message {
+public final class LogMessage {
     /**
      * Private constructor.
      */
-    private Message() {
+    private LogMessage() {
     }
 
     /**
@@ -118,11 +118,6 @@ public final class Message {
      * @{value}.
      */
     public static final String PLAYER_MESSAGE_COMMAND_FAIL = "Command failed! Possibly an error saving config.";
-
-    /**
-     * @{value}.
-     */
-    public static final String PLAYER_MESSAGE_NOT_ALLOWED = "You are not allowed to craft that item!";
 
     /**
      * @{value}.

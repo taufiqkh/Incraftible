@@ -1,6 +1,6 @@
 package com.quiptiq.nocraft;
 
-import static com.quiptiq.nocraft.Message.LOG_PREFIX;
+import static com.quiptiq.nocraft.message.LogMessage.LOG_PREFIX;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,6 +20,8 @@ import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.util.config.Configuration;
+
+import com.quiptiq.nocraft.message.Message;
 
 /**
  * Configuration for NoCraft.
@@ -95,6 +97,12 @@ public class NoCraftConfig {
             config = loadDefaultConfig(plugin, pluginFile, configFile);
         } else {
             config = plugin.getConfiguration();
+        }
+        for (Message message : Message.values()) {
+            String configuredMessage = config.getString(message.getConfigNode());
+            if (configuredMessage != null) {
+                message.overrideMessage(configuredMessage);
+            }
         }
     }
 

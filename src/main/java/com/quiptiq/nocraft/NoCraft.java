@@ -1,9 +1,9 @@
 package com.quiptiq.nocraft;
 
-import static com.quiptiq.nocraft.Message.LOG_DISABLED;
-import static com.quiptiq.nocraft.Message.LOG_ENABLED;
-import static com.quiptiq.nocraft.Message.LOG_WARN_NO_CONFIG;
-import static com.quiptiq.nocraft.Message.LOG_WARN_NO_SPOUT;
+import static com.quiptiq.nocraft.message.LogMessage.LOG_DISABLED;
+import static com.quiptiq.nocraft.message.LogMessage.LOG_ENABLED;
+import static com.quiptiq.nocraft.message.LogMessage.LOG_WARN_NO_CONFIG;
+import static com.quiptiq.nocraft.message.LogMessage.LOG_WARN_NO_SPOUT;
 
 import java.util.logging.Logger;
 

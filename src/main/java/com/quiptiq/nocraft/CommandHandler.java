@@ -1,6 +1,6 @@
 package com.quiptiq.nocraft;
 
-import static com.quiptiq.nocraft.Message.*;
+import static com.quiptiq.nocraft.message.LogMessage.*;
 
 import java.util.Collections;
 import java.util.HashMap;
