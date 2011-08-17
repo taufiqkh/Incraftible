@@ -1,15 +1,20 @@
 package com.quiptiq.nocraft;
 
-import static com.quiptiq.nocraft.Message.LOG_WARN_NO_BUKKIT_CONFIG;
+import static com.quiptiq.nocraft.Message.LOG_PREFIX;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.jar.JarFile;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
@@ -28,8 +33,27 @@ import org.bukkit.util.config.Configuration;
  */
 public class NoCraftConfig {
 
+    private static final String CONFIG_FILENAME = "config.yml";
+
+    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+
+    private static final String LOG_DEFAULT_CONFIG = LOG_PREFIX + "No config file found in %s, generating default.";
+
+    private static final String LOG_WARN_FAILED_CREATING_CONFIG_DIRECTORY = LOG_PREFIX +
+            "Couldn't create config directory %s";
+
+    private static final String LOG_WARN_CLOSE_JAR_ENTRY = LOG_PREFIX + "Couldn't close jar entry reader";
+
+    private static final String LOG_WARN_CLOSE_FILE_WRITER = LOG_PREFIX + "Couldn't close file writer";
+
+    /**
+     * Prefix for NoCraft crafting permissions.
+     */
     private static final String PERMISSION_PREFIX = "nocraft.craft.";
 
+    /**
+     * Map from each material to the permission that controls its crafting.
+     */
     private static final Map<Material, String> PERMISSION_NAMES;
 
     static {
@@ -52,8 +76,8 @@ public class NoCraftConfig {
      * @param newConfig
      *            Bukkit config on which properties are retrieved.
      */
-    public NoCraftConfig(Configuration newConfig) {
-        loadConfig(newConfig);
+    public NoCraftConfig(NoCraft plugin, File pluginFile) {
+        loadConfig(plugin, pluginFile);
     }
 
     /**
@@ -63,17 +87,73 @@ public class NoCraftConfig {
      * @param newConfig
      *            Bukkit config on which properties are retrieved.
      */
-    public void loadConfig(Configuration newConfig) {
-        config = newConfig;
-        if (config == null) {
-            log.warning(LOG_WARN_NO_BUKKIT_CONFIG);
-            return;
+    public void loadConfig(NoCraft plugin, File pluginFile) {
+        // Check for existing config file
+        File configFile = new File(plugin.getDataFolder(), CONFIG_FILENAME);
+        if (!configFile.exists()) {
+            log.info(String.format(LOG_DEFAULT_CONFIG, configFile.getPath()));
+            config = loadDefaultConfig(plugin, pluginFile, configFile);
+        } else {
+            config = plugin.getConfiguration();
         }
-
     }
 
     /**
-     * Disallows the specified item and saves the config. If the item is already disallowed, does nothing.
+     * Loads the default configuration for the specified plugin, using the given
+     * plugin file and writes if out to the specified config file.
+     *
+     * @param plugin
+     *            Plugin to be configured.
+     * @param pluginFile
+     *            Jar file containing the plugin.
+     * @param configFile
+     *            File that will contain the config.
+     * @return
+     */
+    private Configuration loadDefaultConfig(NoCraft plugin, File pluginFile, File configFile) {
+        // Use the default that is packaged in the NoCraft jar
+        String nextLine = null;
+        FileWriter writer = null;
+        BufferedReader reader = null;
+        if (configFile.getParent() != null && !(new File(configFile.getParent()).mkdirs())) {
+            log.warning(String.format(LOG_WARN_FAILED_CREATING_CONFIG_DIRECTORY, configFile.getPath()));
+            return null;
+        }
+        try {
+            JarFile jar = new JarFile(pluginFile);
+            reader = new BufferedReader(new InputStreamReader(jar.getInputStream(jar.getJarEntry(CONFIG_FILENAME))));
+            writer = new FileWriter(configFile);
+            while ((nextLine = reader.readLine()) != null) {
+                writer.write(nextLine);
+                writer.append(LINE_SEPARATOR);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    log.warning(LOG_WARN_CLOSE_JAR_ENTRY);
+                }
+            }
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    log.warning(LOG_WARN_CLOSE_FILE_WRITER);
+                }
+            }
+        }
+        Configuration config = plugin.getConfiguration();
+        config.load();
+        return config;
+    }
+
+    /**
+     * Disallows the specified item and saves the config. If the item is already
+     * disallowed, does nothing.
      *
      * @param material
      *            Material of item to disallow.
@@ -81,7 +161,8 @@ public class NoCraftConfig {
      */
     public boolean disallowItem(Material material) {
         if (material == null) {
-//            log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, material));
+            // log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID,
+            // material));
             return false;
         }
         disallowedItems.add(material);
@@ -89,7 +170,8 @@ public class NoCraftConfig {
     }
 
     /**
-     * Allows the specified item and saves the config. If the item is already allowed, does nothing.
+     * Allows the specified item and saves the config. If the item is already
+     * allowed, does nothing.
      *
      * @param material
      *            Id of the item to allow.
@@ -98,7 +180,8 @@ public class NoCraftConfig {
      */
     public boolean allowItem(Material material) {
         if (material == null) {
-//            log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, material));
+            // log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID,
+            // material));
             return false;
         }
         disallowedItems.remove(material);
@@ -115,7 +198,7 @@ public class NoCraftConfig {
         for (Material item : disallowedItems) {
             itemIds.add(item.getId());
         }
-        config.setProperty(ConfigType.DISALLOWED_ITEM.key, itemIds);
+        //config.setProperty(ConfigType.DISALLOWED_ITEM.key, itemIds);
         return config.save();
     }
 
@@ -133,61 +216,9 @@ public class NoCraftConfig {
     /**
      * Returns a set of all currently disallowed items.
      *
-     * @return  Set of all disallowed items.
+     * @return Set of all disallowed items.
      */
     public Set<Material> getDisallowedItems() {
         return new HashSet<Material>(disallowedItems);
-    }
-
-    /**
-     * Configuration types. Only lower case for this implementation.
-     */
-    private enum ConfigType {
-        /**
-         * List of disallowed item(s).
-         */
-        DISALLOWED_ITEM("disallowed");
-
-        /**
-         * Reverse mapping from string to config type.
-         */
-        private static final Map<String, ConfigType> CONFIG_TYPE_MAP;
-
-        static {
-            // Build the mapping from string to config type.
-            HashMap<String, ConfigType> typeMap = new HashMap<String, ConfigType>();
-            for (ConfigType type : EnumSet.allOf(ConfigType.class)) {
-                typeMap.put(type.key, type);
-            }
-            CONFIG_TYPE_MAP = Collections.unmodifiableMap(typeMap);
-        }
-
-        /**
-         * Key of the config item in the file.
-         */
-        private final String key;
-
-        /**
-         * Create a new ConfigType with the specified key.
-         *
-         * @param configKey
-         *            Key to match in config files.
-         */
-        private ConfigType(String configKey) {
-            this.key = configKey;
-        }
-
-        /**
-         * Whether or not the specified key is understood.
-         *
-         * @param key
-         *            Key to check
-         * @return True if the key is used and understood by the config,
-         *         otherwise false.
-         */
-        @SuppressWarnings("unused")
-        public static boolean isKeyUnderstood(String key) {
-            return key != null && CONFIG_TYPE_MAP.containsKey(key.toLowerCase());
-        }
     }
 }

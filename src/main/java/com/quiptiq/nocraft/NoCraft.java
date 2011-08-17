@@ -2,8 +2,8 @@ package com.quiptiq.nocraft;
 
 import static com.quiptiq.nocraft.Message.LOG_DISABLED;
 import static com.quiptiq.nocraft.Message.LOG_ENABLED;
-import static com.quiptiq.nocraft.Message.LOG_WARN_NO_BUKKITCONTRIB;
 import static com.quiptiq.nocraft.Message.LOG_WARN_NO_CONFIG;
+import static com.quiptiq.nocraft.Message.LOG_WARN_NO_SPOUT;
 
 import java.util.logging.Logger;
 
@@ -32,7 +32,7 @@ public class NoCraft extends JavaPlugin {
     @Override
     public final void onLoad() {
         log = getServer().getLogger();
-        this.config = new NoCraftConfig(this.getConfiguration());
+        this.config = new NoCraftConfig(this, this.getFile());
         super.onLoad();
     }
 
@@ -49,7 +49,7 @@ public class NoCraft extends JavaPlugin {
             log.warning(LOG_WARN_NO_CONFIG);
         } else {
             if (pluginManager.getPlugin("Spout") == null) {
-                log.warning(LOG_WARN_NO_BUKKITCONTRIB);
+                log.warning(LOG_WARN_NO_SPOUT);
             }
             getCommand(CommandHandler.COMMAND).setExecutor(new CommandHandler(config));
             pluginManager.registerEvent(

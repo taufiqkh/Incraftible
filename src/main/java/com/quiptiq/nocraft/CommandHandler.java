@@ -38,7 +38,7 @@ public class CommandHandler implements CommandExecutor {
     private static final String PERMISSION_COMMAND_PARENT = "nocraft.command";
 
     /**
-     *
+     * Permission for all NoCraft commands.
      */
     private static final String PERMISSION_COMMAND_ALL = PERMISSION_COMMAND_PARENT + ".*";
 
@@ -96,7 +96,7 @@ public class CommandHandler implements CommandExecutor {
                 return true;
             }
 
-            Material item = validateItemId(sender, args[1]);
+            Material item = validateMaterial(sender, args[1]);
             if (item != null) {
                 // Item corresponds to a valid material
                 if (config.disallowItem(item)) {
@@ -111,7 +111,7 @@ public class CommandHandler implements CommandExecutor {
                 return true;
             }
 
-            Material item = validateItemId(sender, args[1]);
+            Material item = validateMaterial(sender, args[1]);
             if (item != null) {
                 // Item corresponds to a valid material.
                 if (config.allowItem(item)) {
@@ -167,27 +167,21 @@ public class CommandHandler implements CommandExecutor {
     }
 
     /**
-     * Validates the specified item id and if it is a valid number that matches
-     * a material id, returns the material for that id. If not, informs the
-     * sender and returns null.
+     * Validates the specified material id or name and if it matches a
+     * material id, returns the material object. If not, informs the sender
+     * and returns null.
      *
      * @param sender
      *            Sender of the id
-     * @param idToValidate
-     *            Id to be validated.
+     * @param materialToValidate
+     *            Id or name of the material to be validated. If a name, must
+     *            match the {@link org.bukkit.Material} enum.
      * @return A material for the specified id if it is valid, otherwise null.
      */
-    private Material validateItemId(CommandSender sender, String idToValidate) {
-        int itemId;
-        try {
-            itemId = Integer.parseInt(idToValidate);
-        } catch (NumberFormatException e) {
-            sender.sendMessage(String.format(PLAYER_MESSAGE_BAD_ITEM_ID, idToValidate));
-            return null;
-        }
-        Material material = Material.getMaterial(itemId);
+    private Material validateMaterial(CommandSender sender, String materialToValidate) {
+        Material material = Material.matchMaterial(materialToValidate);
         if (material == null) {
-            log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, itemId));
+            log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID, materialToValidate));
         }
         return material;
     }

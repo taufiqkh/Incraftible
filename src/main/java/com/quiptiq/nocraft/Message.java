@@ -18,8 +18,8 @@ public final class Message {
     /**
      * {@value}.
      */
-    public static final String LOG_WARN_NO_BUKKITCONTRIB = LOG_PREFIX
-            + "BukkitContrib not found. Can't intercept crafting events.";
+    public static final String LOG_WARN_NO_SPOUT = LOG_PREFIX
+            + "Spout not found. Can't intercept crafting events.";
 
     /**
      * {@value}.
@@ -53,11 +53,6 @@ public final class Message {
      * {@value}.
      */
     public static final String ENTER_TO_CONTINUE = LOG_PREFIX + "Please press Enter to continue.";
-
-    /**
-     * {@value}.
-     */
-    public static final String LOG_DEFAULT_CONFIG = LOG_PREFIX + "No config file detected, loading defaults.";
 
     /**
      * @{value}.
@@ -123,11 +118,6 @@ public final class Message {
      * @{value}.
      */
     public static final String PLAYER_MESSAGE_COMMAND_FAIL = "Command failed! Possibly an error saving config.";
-
-    /**
-     * @{value}.
-     */
-    public static final String PLAYER_MESSAGE_BAD_ITEM_ID = "Bad item id: %s";
 
     /**
      * @{value}.
