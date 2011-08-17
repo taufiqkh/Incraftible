@@ -61,15 +61,15 @@ public enum Message {
      * @return String containing the prepared messsage.
      */
     public String prepareMessage(Object... args) {
-        Object[] iteratedArgs = new Object[args.length];
+        Object[] preparedArgs = new Object[args.length];
         for (int i = 0; i < args.length; i++) {
             if (args[i] instanceof Material) {
                 String rawMaterialName = ((Material) args[i]).name();
-                iteratedArgs[i] = rawMaterialName.toLowerCase().replaceAll("_", " ");
+                preparedArgs[i] = rawMaterialName.toLowerCase().replaceAll("_", " ");
             } else {
-                iteratedArgs[i] = args[i];
+                preparedArgs[i] = args[i];
             }
         }
-        return String.format(getMessage(), args);
+        return String.format(getMessage(), preparedArgs);
     }
 }

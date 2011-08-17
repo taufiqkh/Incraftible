@@ -1,5 +1,5 @@
 name: Incraftible
-version: 0.1
+version: 0.2
 author: Taufiq Hoven
 website: 
 main: com.quiptiq.incraftible.Incraftible
@@ -83,6 +83,57 @@ permissions:
             incraftible.craft.diamond_spade:  true
             incraftible.craft.diamond_pickaxe:    true
             incraftible.craft.diamond_axe:    true
+    incraftible.craft.weapons.*:
+        description:    Allows crafting of all weapons.
+        default:    false
+        children:
+            incraftible.craft.wood_sword:   true
+            incraftible.craft.stone_sword:   true
+            incraftible.craft.gold_sword:   true
+            incraftible.craft.iron_sword:   true
+            incraftible.craft.diamond_sword:   true
+            incraftible.craft.bow:  true
+            incraftible.craft.arrow:    true
+    incraftible.craft.armor.*:
+        description:    Allows crafting of all armor.
+        default:    false
+        children:
+            incraftible.craft.armor.leather.*:  true
+            incraftible.craft.armor.iron.*:  true
+            incraftible.craft.armor.diamond.*:  true
+            incraftible.craft.armor.gold.*:  true
+    incraftible.craft.armor.leather.*:
+        description:    Allows crafting of all leather armor.
+        default:    false
+        children:
+            incraftible.craft.leather_helmet: true
+            incraftible.craft.leather_chestplate: true
+            incraftible.craft.leather_leggings: true
+            incraftible.craft.leather_boots: true
+    incraftible.craft.armor.iron.*:
+        description:    Allows crafting of all iron armor.
+        default:    false
+        children:
+            incraftible.craft.iron_helmet: true
+            incraftible.craft.iron_chestplate: true
+            incraftible.craft.iron_leggings: true
+            incraftible.craft.iron_boots: true
+    incraftible.craft.armor.diamond.*:
+        description:    Allows crafting of all diamond armor.
+        default:    false
+        children:
+            incraftible.craft.diamond_helmet: true
+            incraftible.craft.diamond_chestplate: true
+            incraftible.craft.diamond_leggings: true
+            incraftible.craft.diamond_boots: true
+    incraftible.craft.armor.gold.*:
+        description:    Allows crafting of all gold armor.
+        default:    false
+        children:
+            incraftible.craft.gold_helmet: true
+            incraftible.craft.gold_chestplate: true
+            incraftible.craft.gold_leggings: true
+            incraftible.craft.gold_boots: true
     incraftible.craft.standard:
         description: Allows crafting of all standard minecraft items.
         default: false

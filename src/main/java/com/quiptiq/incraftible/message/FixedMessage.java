@@ -10,10 +10,12 @@ public final class FixedMessage {
     private FixedMessage() {
     }
 
+    public static final String PLUGIN_NAME = "Incraftible";
+
     /**
      * {@value}.
      */
-    public static final String LOG_PREFIX = "[Incraftible] ";
+    public static final String LOG_PREFIX = "[" + PLUGIN_NAME + "] ";
 
     /**
      * {@value}.
@@ -72,7 +74,12 @@ public final class FixedMessage {
     /**
      * @{value}.
      */
-    public static final String LOG_ENABLED = LOG_PREFIX + "Plugin enabled.";
+    public static final String VERSION = "0.2";
+
+    /**
+     * @{value}.
+     */
+    public static final String LOG_ENABLED = LOG_PREFIX + PLUGIN_NAME + " " + VERSION + " enabled.";
 
     /**
      * @{value}.
@@ -82,13 +89,8 @@ public final class FixedMessage {
     /**
      * @{value}.
      */
-    public static final String VERSION = "0.1";
-
-    /**
-     * @{value}.
-     */
     public static final String[] COMMAND_USAGE = {
-            "Incraftible " + VERSION + " by Taufiq Hoven",
+            PLUGIN_NAME + " " + VERSION + " by Taufiq Hoven",
             "/nc disallow <item number> Disallows crafting an item",
             "/nc allow <item number>    Allows crafting an item",
             "/nc list                   Lists all disallowed items"
@@ -97,12 +99,12 @@ public final class FixedMessage {
     /**
      * @{value}.
      */
-    public static final String PLAYER_MESSAGE_ALLOW_USAGE = "Usage: /nc allow <itemNumber>";
+    public static final String PLAYER_MESSAGE_ALLOW_USAGE = "Usage: /ic allow <itemNumber>";
 
     /**
      * @{value}.
      */
-    public static final String PLAYER_MESSAGE_DISALLOW_USAGE = "Usage: /nc disallow <itemNumber>";
+    public static final String PLAYER_MESSAGE_DISALLOW_USAGE = "Usage: /ic disallow <itemNumber>";
 
     /**
      * @{value}.

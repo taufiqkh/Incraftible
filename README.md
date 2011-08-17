@@ -1,24 +1,28 @@
 Incraftible
 ===========
 
-A [Minecraft](http://www.minecraft.net/) [Bukkit](http://bukkit.org/) plugin to prevent crafting of specified items. Configurable via the command line or config file.
+A [Minecraft](http://www.minecraft.net/) [Bukkit](http://bukkit.org/) plugin to prevent crafting of specified items. Configurable via config file.
 
-Functionality is currently limited, as the plugin was only written in a day. It is expected that at some point Bukkit will include the required hooks to allow
+Functionality is currently limited. It is expected that at some point Bukkit will include the required hooks to allow
 more comprehensive permissions plugins (eg. WorldGuard) to fill the gap, and this plugin will be deprecated.
 
 Configuration
 -------------
 
-Configuration is via a yml file in the plugins/Incraftible subdirectory of the minecraft server. There is currently only one option, `disallowed`, which specifies the
-item ids of items that are not permitted to be crafted. For example, the following prevents the crafting of wooden picks and maps, respectively:
+Configuration of who can craft what is done via Bukkit permissions. All standard Bukkit materials are supported. For convenience, several permission nodes have
+been created that control permissions on a number of objects. These nodes are:
 
-    disallowed:
-    - 270
-    - 358
+incraftible.craft.*: Allows crafting of all items.
+incraftible.craft.tools.*:  Allows crafting of all tools, including swords. These may be further subdivided into wood, stone, iron, gold and diamond.
+incraftible.craft.standard: Allows crafting of standard minecraft objects. That is, any object that you can craft on a vanilla server.
+incraftible.craft.armor.*: Allows crafting of all armor. These may be further subdivided into leather, iron, gold and diamond.
+
+Configuration of the plugin itself is via a yml file in the plugins/Incraftible subdirectory of the minecraft server. At the moment the only configurable option is
+the message sent to the player when crafting fails.
 
 Dependencies
 ------------
-Incraftible requires CraftBukkit and the Spout plugin.
+Incraftible requires CraftBukkit and the Spout plugin. Spout is necessary for the crafting hooks, which at the time of writing is not present in Bukkit.
 
 Development
 -----------
