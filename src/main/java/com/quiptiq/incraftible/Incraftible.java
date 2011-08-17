@@ -16,7 +16,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Plugin for intercepting crafting events.
  *
  * @author Taufiq Hoven
- * @version 0.1
  */
 public class Incraftible extends JavaPlugin {
 

@@ -1,5 +1,5 @@
 name: Incraftible
-version: 0.2
+version: 0.3
 author: Taufiq Hoven
 website: 
 main: com.quiptiq.incraftible.Incraftible
@@ -135,8 +135,8 @@ permissions:
             incraftible.craft.gold_leggings: true
             incraftible.craft.gold_boots: true
     incraftible.craft.standard:
-        description: Allows crafting of all standard minecraft items.
-        default: false
+        description: Allows crafting of all standard minecraft items. This is the default.
+        default: true
         children:
             incraftible.craft.wood: true
             incraftible.craft.dispenser: true
@@ -246,7 +246,7 @@ permissions:
             incraftible.craft.map: true
             incraftible.craft.shears: true
     incraftible.craft.unknown:
-        description: Allows crafting of materials that are not recognised by Incraftible. This means that plugin updates will only be required for explicit control of these materials.
+        description: Currently experimental. Allows crafting of materials that are not recognised by Incraftible. This means that plugin updates will only be required for explicit control of these materials.
         default: false
     incraftible.craft.air:
         description: Allows crafting of air.
