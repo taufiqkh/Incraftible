@@ -12,10 +12,10 @@ Configuration
 Configuration of who can craft what is done via Bukkit permissions. All standard Bukkit materials are supported. For convenience, several permission nodes have
 been created that control permissions on a number of objects. These nodes are:
 
-incraftible.craft.*: Allows crafting of all items.
-incraftible.craft.tools.*:  Allows crafting of all tools, including swords. These may be further subdivided into wood, stone, iron, gold and diamond.
-incraftible.craft.standard: Allows crafting of standard minecraft objects. That is, any object that you can craft on a vanilla server.
-incraftible.craft.armor.*: Allows crafting of all armor. These may be further subdivided into leather, iron, gold and diamond.
+* incraftible.craft.\*: Allows crafting of all items.
+* incraftible.craft.tools.\*:  Allows crafting of all tools, including swords. These may be further subdivided into wood, stone, iron, gold and diamond.
+* incraftible.craft.standard: Allows crafting of standard minecraft objects. That is, any object that you can craft on a vanilla server.
+* incraftible.craft.armor.\*: Allows crafting of all armor. These may be further subdivided into leather, iron, gold and diamond.
 
 Configuration of the plugin itself is via a yml file in the plugins/Incraftible subdirectory of the minecraft server. At the moment the only configurable option is
 the message sent to the player when crafting fails.
@@ -38,16 +38,8 @@ Incraftible has been tested with the following:
 
 Planned Features
 ----------------
-In-game commands are planned to allow and disallow items. To disallow the crafting of maps:
+In-game commands are being investigated.
 
-    /ic disallow 358
+Dyes are currently all enabled or all disabled, as they all share the same Bukkit material. Permissions will probably be based on their colours, ie: black, red etc.
 
-To allow it again:
-
-    /ic disallow 358
-
-To list all currently disallowed items:
-
-    /ic list
-
-Note that these commands are NOT YET IMPLEMENTED.
+Item names are planned to be put into a resource bundle, partly so that I learn how to use resource bundles. 

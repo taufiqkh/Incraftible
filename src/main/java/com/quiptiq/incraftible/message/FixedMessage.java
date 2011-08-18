@@ -10,6 +10,11 @@ public final class FixedMessage {
     private FixedMessage() {
     }
 
+    /**
+     * Version of Incraftible: {@value}
+     */
+    public static final String VERSION = "0.4";
+
     public static final String PLUGIN_NAME = "Incraftible";
 
     /**
@@ -70,11 +75,6 @@ public final class FixedMessage {
      * @{value}.
      */
     public static final String LOG_ITEM_CRAFT_ATTEMPT = "Prevented player %s from crafting %s";
-
-    /**
-     * @{value}.
-     */
-    public static final String VERSION = "0.3";
 
     /**
      * @{value}.

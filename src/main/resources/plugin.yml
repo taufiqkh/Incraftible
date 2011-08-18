@@ -1,10 +1,10 @@
-name: Incraftible
-version: 0.3
-author: Taufiq Hoven
-website: 
+name: ${project.name}
+version: ${project.version}
+author: ${project.author}
+website: ${project.url}
 main: com.quiptiq.incraftible.Incraftible
 description: Intercepts crafting events.
-softdepend: [Spout]
+softdepend: [Spout,PermissionsBukkit]
 commands:
     ic:
         description: "Incraftible commands"
@@ -59,6 +59,7 @@ permissions:
             incraftible.craft.stone_spade:  true
             incraftible.craft.stone_pickaxe:    true
             incraftible.craft.stone_axe:    true
+            incraftible.craft.stone_hoe:    true
     incraftible.craft.tools.gold.*:
         description:    Allows crafting of gold tools.
         default: false
@@ -67,6 +68,7 @@ permissions:
             incraftible.craft.gold_spade:  true
             incraftible.craft.gold_pickaxe:    true
             incraftible.craft.gold_axe:    true
+            incraftible.craft.gold_hoe:    true
     incraftible.craft.tools.iron.*:
         description:    Allows crafting of iron tools.
         default: false
@@ -75,6 +77,7 @@ permissions:
             incraftible.craft.iron_spade:  true
             incraftible.craft.iron_pickaxe:    true
             incraftible.craft.iron_axe:    true
+            incraftible.craft.iron_hoe:    true
     incraftible.craft.tools.diamond.*:
         description:    Allows crafting of diamond tools.
         default: false
@@ -83,6 +86,7 @@ permissions:
             incraftible.craft.diamond_spade:  true
             incraftible.craft.diamond_pickaxe:    true
             incraftible.craft.diamond_axe:    true
+            incraftible.craft.diamond_hoe:    true
     incraftible.craft.weapons.*:
         description:    Allows crafting of all weapons.
         default:    false
@@ -134,11 +138,17 @@ permissions:
             incraftible.craft.gold_chestplate: true
             incraftible.craft.gold_leggings: true
             incraftible.craft.gold_boots: true
+    incraftible.craft.dye.*:
+        description:    Allows crafting of all dyes.
+        default:    false
+        children:
+            incraftible.craft.dye.black: true
     incraftible.craft.standard:
         description: Allows crafting of all standard minecraft items. This is the default.
         default: true
         children:
             incraftible.craft.wood: true
+            incraftible.craft.lapis_block: true
             incraftible.craft.dispenser: true
             incraftible.craft.sandstone: true
             incraftible.craft.note_block: true
@@ -181,6 +191,8 @@ permissions:
             incraftible.craft.flint_and_steel: true
             incraftible.craft.bow: true
             incraftible.craft.arrow: true
+            incraftible.craft.iron_ingot: true
+            incraftible.craft.gold_ingot: true
             incraftible.craft.iron_sword: true
             incraftible.craft.wood_sword: true
             incraftible.craft.wood_spade: true
@@ -238,6 +250,7 @@ permissions:
             incraftible.craft.compass: true
             incraftible.craft.fishing_rod: true
             incraftible.craft.watch: true
+            incraftible.craft.dye.*: true
             incraftible.craft.sugar: true
             incraftible.craft.cake: true
             incraftible.craft.bed: true
@@ -827,8 +840,8 @@ permissions:
     incraftible.craft.cooked_fish:
         description: Allows crafting of cooked fish.
         default: false
-    incraftible.craft.ink_sack:
-        description: Allows crafting of ink sacs. Misspelled in Bukkit so we're left with ink_sack.
+    incraftible.craft.dye:
+        description: Allows crafting of dyes.
         default: false
     incraftible.craft.bone:
         description: Allows crafting of bone.

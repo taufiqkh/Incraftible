@@ -2,8 +2,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.quiptiq</groupId>
   <artifactId>Incraftible</artifactId>
-  <name>Incraftible</name>
-  <version>0.3</version>
+  <name>${project.artifactId}</name>
+  <version>0.4</version>
   <url>https://github.com/taufiqkh/Incraftible</url>
   <dependencies>
     <dependency>
@@ -23,6 +23,12 @@
   </dependencies>
   <build>
     <finalName>${project.name}</finalName>
+    <resources>
+        <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering>
+        </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -56,4 +62,7 @@
       </plugin>
     </plugins>
   </build>
+  <properties>
+    <project.author>Taufiq Hoven</project.author>
+  </properties>
 </project>

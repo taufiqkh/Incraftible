@@ -59,6 +59,11 @@ public class IncraftibleConfig {
     private static final String PERMISSION_PREFIX = PERMISSION_ROOT + ".craft.";
 
     /**
+     * Special case for dye, which for various reasons is represented by the INK_SACK Material.
+     */
+    private static final String PERMISSION_DYES = "dye.*";
+
+    /**
      * Map from each material to the permission that controls its crafting.
      */
     private static final Map<Material, String> PERMISSION_NAMES;
@@ -66,7 +71,11 @@ public class IncraftibleConfig {
     static {
         HashMap<Material, String> permissionNames = new HashMap<Material, String>();
         for (Material material : Material.values()) {
-            permissionNames.put(material, PERMISSION_PREFIX + material.toString().toLowerCase());
+            if (material.equals(Material.INK_SACK)) {
+                permissionNames.put(material, PERMISSION_PREFIX + PERMISSION_DYES);
+            } else {
+                permissionNames.put(material, PERMISSION_PREFIX + material.toString().toLowerCase());
+            }
         }
         PERMISSION_NAMES = Collections.unmodifiableMap(permissionNames);
     }
@@ -133,7 +142,7 @@ public class IncraftibleConfig {
             return null;
         }
 
-
+        // Read the default config file from the jar
         try {
             JarFile jar = new JarFile(pluginFile);
             reader = new BufferedReader(new InputStreamReader(jar.getInputStream(jar.getJarEntry(CONFIG_FILENAME))));
