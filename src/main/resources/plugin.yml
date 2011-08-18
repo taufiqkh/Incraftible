@@ -39,7 +39,8 @@ permissions:
         description: Allows crafting of all tools.
         default: false
         children:
-            incraftible.craft.tools.stone,*:    true
+            incraftible.craft.tools.wood.*: true
+            incraftible.craft.tools.stone.*:    true
             incraftible.craft.tools.gold.*: true
             incraftible.craft.tools.iron.*: true
             incraftible.craft.tools.diamond.*:  true
@@ -51,6 +52,7 @@ permissions:
             incraftible.craft.wood_spade: true
             incraftible.craft.wood_pickaxe: true
             incraftible.craft.wood_axe: true
+            incraftible.craft.wood_hoe: true
     incraftible.craft.tools.stone.*:
         description:    Allows crafting of stone tools.
         default: false
@@ -840,7 +842,7 @@ permissions:
     incraftible.craft.cooked_fish:
         description: Allows crafting of cooked fish.
         default: false
-    incraftible.craft.dye:
+    incraftible.craft.dye.*:
         description: Allows crafting of dyes.
         default: false
     incraftible.craft.bone:
@@ -870,6 +872,6 @@ permissions:
     incraftible.craft.gold_record:
         description: Allows crafting of gold records.
         default: false
-    incraftible.craft.green_record;:
+    incraftible.craft.green_record:
         description: Allows crafting of green records.
         default: false
