@@ -27,7 +27,7 @@ public class CraftEventListener extends InventoryListener {
 
     @Override
     public void onInventoryCraft(InventoryCraftEvent event) {
-        if (event.isCancelled()) {
+        if (event.isCancelled() || event.getResult() == null) {
             return;
         }
         if (!handler.handleCraft(event, event.getResult().getType())) {

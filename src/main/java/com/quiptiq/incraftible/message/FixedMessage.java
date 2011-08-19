@@ -13,7 +13,7 @@ public final class FixedMessage {
     /**
      * Version of Incraftible: {@value}
      */
-    public static final String VERSION = "0.4";
+    public static final String VERSION = "0.5";
 
     public static final String PLUGIN_NAME = "Incraftible";
 

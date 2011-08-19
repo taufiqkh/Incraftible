@@ -3,7 +3,7 @@
   <groupId>com.quiptiq</groupId>
   <artifactId>Incraftible</artifactId>
   <name>${project.artifactId}</name>
-  <version>0.4</version>
+  <version>0.5</version>
   <url>https://github.com/taufiqkh/Incraftible</url>
   <dependencies>
     <dependency>
@@ -19,6 +19,12 @@
       <version>dev-SNAPSHOT</version>
       <type>jar</type>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+    <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.2</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
@@ -58,6 +64,16 @@
               <mainClass>com.quiptiq.incraftible.Main</mainClass>
             </manifest>
           </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.9</version>
+        <configuration>
+          <systemPropertyVariables>
+            <project.version>${project.version}</project.version>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
     </plugins>

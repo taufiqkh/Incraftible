@@ -163,6 +163,7 @@ permissions:
             incraftible.craft.iron_block: true
             incraftible.craft.double_step: true
             incraftible.craft.step: true
+            incraftible.craft.brick: true
             incraftible.craft.tnt: true
             incraftible.craft.bookshelf: true
             incraftible.craft.torch: true
@@ -193,6 +194,7 @@ permissions:
             incraftible.craft.flint_and_steel: true
             incraftible.craft.bow: true
             incraftible.craft.arrow: true
+            incraftible.craft.diamond: true
             incraftible.craft.iron_ingot: true
             incraftible.craft.gold_ingot: true
             incraftible.craft.iron_sword: true
