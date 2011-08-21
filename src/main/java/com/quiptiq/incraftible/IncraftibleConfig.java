@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.config.Configuration;
 
 import com.quiptiq.incraftible.message.Message;
@@ -41,8 +43,8 @@ public class IncraftibleConfig {
 
     private static final String LOG_DEFAULT_CONFIG = LOG_PREFIX + "No config file found in %s, generating default.";
 
-    private static final String LOG_WARN_FAILED_CREATING_CONFIG_DIRECTORY = LOG_PREFIX +
-            "Couldn't create config directory %s";
+    private static final String LOG_WARN_FAILED_CREATING_CONFIG_DIRECTORY = LOG_PREFIX
+            + "Couldn't create config directory %s";
 
     private static final String LOG_WARN_CLOSE_JAR_ENTRY = LOG_PREFIX + "Couldn't close jar entry reader";
 
@@ -59,12 +61,19 @@ public class IncraftibleConfig {
     private static final String PERMISSION_PREFIX = PERMISSION_ROOT + ".craft.";
 
     /**
-     * Special case for dye, which for various reasons is represented by the INK_SACK Material.
+     * Standard permissions as per vanilla Minecraft.
+     */
+    public static final String PERMISSION_STANDARD = PERMISSION_PREFIX + "standard";
+
+    /**
+     * Special case for dye, which for various reasons is represented by the
+     * INK_SACK Material.
      */
     private static final String PERMISSION_DYES = "dye.*";
 
     /**
-     * Map from each material to the permission that controls its crafting.
+     * Map from each material to the name-based permission that controls its
+     * crafting.
      */
     private static final Map<Material, String> PERMISSION_NAMES;
 
@@ -87,7 +96,8 @@ public class IncraftibleConfig {
     private final HashSet<Material> disallowedItems = new HashSet<Material>();
 
     /**
-     * Creates a new IncraftibleConfig based on the specified Bukkit configuration.
+     * Creates a new IncraftibleConfig based on the specified Bukkit
+     * configuration.
      *
      * @param newConfig
      *            Bukkit config on which properties are retrieved.
@@ -112,12 +122,54 @@ public class IncraftibleConfig {
         } else {
             config = plugin.getConfiguration();
         }
+        // Override configurable messages
         for (Message message : Message.values()) {
             String configuredMessage = config.getString(message.getConfigNode());
             if (configuredMessage != null) {
                 message.overrideMessage(configuredMessage);
             }
         }
+    }
+
+    /**
+     * Finds the standard parent permission in a list of permissions and
+     * generates a list of default material name permissions based on the
+     * children of that parent. The child nodes must be by material name, not
+     * id.
+     *
+     * @param parentPermissions
+     *            List of default permissions.
+     * @return List of default material permissions.
+     */
+    public List<Permission> createDefaultMaterialPermissions(List<Permission> parentPermissions) {
+    // Set up material permissions
+        ArrayList<Permission> materialPermissions = new ArrayList<Permission>();
+        for (Permission permission : parentPermissions) {
+            if (PERMISSION_STANDARD.equals(permission.getName())) {
+                // Standard permission found, now iterate and set material
+                // permissions
+                for (String childName : permission.getChildren().keySet()) {
+                    if (!childName.startsWith(PERMISSION_PREFIX)) {
+                        log.warning(LOG_PREFIX + "Unrecognised permission while creating defaults: " + childName);
+                        continue;
+                    }
+                    String materialName = childName.substring(PERMISSION_PREFIX.length());
+                    Material material;
+                    if (PERMISSION_DYES.equals(materialName)) {
+                        material = Material.INK_SACK;
+                    } else {
+                        material = Material.matchMaterial(materialName);
+                        if (material== null) {
+                            log.warning(LOG_PREFIX + "Can't match material with name: " + materialName);
+                            continue;
+                        }
+                    }
+                    materialPermissions.add(new Permission(childName, PermissionDefault.TRUE));
+                }
+                break;
+            }
+        }
+        return materialPermissions;
     }
 
     /**
@@ -183,6 +235,8 @@ public class IncraftibleConfig {
      * Disallows the specified item and saves the config. If the item is already
      * disallowed, does nothing.
      *
+     * TODO: Implement or remove this
+     *
      * @param material
      *            Material of item to disallow.
      * @return True if the disallow was successful, false if the item was null.
@@ -219,6 +273,8 @@ public class IncraftibleConfig {
     /**
      * Saves currently disallowed items.
      *
+     * TODO: Implement or remove this
+     *
      * @return True if the save was successful, otherwise false.
      */
     private boolean saveDisallowedItems() {
@@ -226,7 +282,7 @@ public class IncraftibleConfig {
         for (Material item : disallowedItems) {
             itemIds.add(item.getId());
         }
-        //config.setProperty(ConfigType.DISALLOWED_ITEM.key, itemIds);
+        // config.setProperty(ConfigType.DISALLOWED_ITEM.key, itemIds);
         return config.save();
     }
 
@@ -238,11 +294,15 @@ public class IncraftibleConfig {
      * @return True if the item is allowed, otherwise false.
      */
     public boolean isItemAllowed(Material item, Player player) {
-        return item != null && player.hasPermission(PERMISSION_NAMES.get(item));
+        log.info(LOG_PREFIX + PERMISSION_NAMES.get(item) + ":" + player.hasPermission(PERMISSION_NAMES.get(item)));
+        return item != null
+                && (player.hasPermission(PERMISSION_NAMES.get(item)));
     }
 
     /**
      * Returns a set of all currently disallowed items.
+     *
+     * TODO: Implement or remove this.
      *
      * @return Set of all disallowed items.
      */

@@ -5,10 +5,12 @@ import static com.quiptiq.incraftible.message.FixedMessage.LOG_ENABLED;
 import static com.quiptiq.incraftible.message.FixedMessage.LOG_WARN_NO_CONFIG;
 import static com.quiptiq.incraftible.message.FixedMessage.LOG_WARN_NO_SPOUT;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,6 +34,10 @@ public class Incraftible extends JavaPlugin {
     public final void onLoad() {
         log = getServer().getLogger();
         this.config = new IncraftibleConfig(this, this.getFile());
+        List<Permission> materialPermissions = config.createDefaultMaterialPermissions(this.getDescription().getPermissions());
+        for (Permission permission : materialPermissions) {
+            getServer().getPluginManager().addPermission(permission);
+        }
         super.onLoad();
     }
 
