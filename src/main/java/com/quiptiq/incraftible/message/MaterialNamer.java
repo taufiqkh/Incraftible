@@ -22,7 +22,7 @@ import org.bukkit.Material;
  * @author Taufiq Hoven
  */
 public class MaterialNamer {
-    private static final String DEFAULT_RESOURCE_BUNDLE = "messages";
+    private static final String DEFAULT_RESOURCE_BUNDLE = "incraftible_messages";
 
     private static final String RESOURCE_ITEM_PREFIX = "item.";
 
@@ -94,7 +94,7 @@ public class MaterialNamer {
      * resource bundle or, failing that, the Material enum.
      *
      * @param material
-     *            Material for which a name is to be retrived.
+     *            Material for which a name is to be retrieved.
      * @return Name for the specified material.
      */
     public String getName(Material material) {
