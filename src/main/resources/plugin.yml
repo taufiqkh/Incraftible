@@ -4,7 +4,8 @@ author: ${project.author}
 website: ${project.url}
 main: com.quiptiq.incraftible.Incraftible
 description: Intercepts crafting events.
-softdepend: [Spout,PermissionsBukkit]
+depend: [Spout]
+softdepend: [PermissionsBukkit]
 commands:
     ic:
         description: "Incraftible commands"
@@ -183,6 +184,7 @@ permissions:
             incraftible.craft.redstone_torch_on: true
             incraftible.craft.stone_button: true
             incraftible.craft.snow_block: true
+            incraftible.craft.clay: true
             incraftible.craft.jukebox: true
             incraftible.craft.fence: true
             incraftible.craft.glowstone: true
