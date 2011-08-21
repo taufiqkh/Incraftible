@@ -1,9 +1,10 @@
 package com.quiptiq.incraftible;
 
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.FileReader;
@@ -120,7 +121,7 @@ public class IncraftibleConfigTest {
         when(mockPlayer.hasPermission("incraftible.craft.clay")).thenReturn(true);
         assertTrue(
                 "Default items configured as allowed should be returned as such",
-                config.isItemAllowed(testMaterial, mockPlayer));
+                config.isItemAllowed(testMaterial, null, mockPlayer));
     }
 
     /**
@@ -138,7 +139,7 @@ public class IncraftibleConfigTest {
         when(mockPlayer.hasPermission("incraftible.craft.apple")).thenReturn(false);
         assertFalse(
                 "Default items configured as disallowed should be returned as such",
-                config.isItemAllowed(testMaterial, mockPlayer));
+                config.isItemAllowed(testMaterial, null, mockPlayer));
     }
 
     @Test

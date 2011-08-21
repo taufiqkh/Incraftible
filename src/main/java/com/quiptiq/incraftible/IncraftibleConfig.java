@@ -8,16 +8,24 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.TreeType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Dye;
+import org.bukkit.material.MaterialData;
+import org.bukkit.material.Tree;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.permissions.PermissionDefault;
@@ -28,10 +36,7 @@ import com.quiptiq.incraftible.message.Message;
 /**
  * Configuration for Incraftible.
  *
- * <p>
- * NOTE:
- * <p>
- * Overengineered at the moment, while exploring how Bukkit config works.
+ * TODO: Refactor the permissions logic into a dedicated class.
  *
  * @author Taufiq Hoven
  */
@@ -65,11 +70,17 @@ public class IncraftibleConfig {
      */
     public static final String PERMISSION_STANDARD = PERMISSION_PREFIX + "standard";
 
+    public static final String PERMISSION_SEPARATOR = ".";
+
+    public static final String PERMISSION_WILDCARD = "*";
+
     /**
      * Special case for dye, which for various reasons is represented by the
      * INK_SACK Material.
      */
-    private static final String PERMISSION_DYES = "dye.*";
+    private static final String PERMISSION_DYE = "dye";
+
+    private static final String PERMISSION_DYE_ALL = PERMISSION_DYE + ".*";
 
     /**
      * Map from each material to the name-based permission that controls its
@@ -77,16 +88,26 @@ public class IncraftibleConfig {
      */
     private static final Map<Material, String> PERMISSION_NAMES;
 
+    private static final Map<Material, Map<Byte, String>> PERMISSION_DATA_NAMES;
+
     static {
         HashMap<Material, String> permissionNames = new HashMap<Material, String>();
+        HashMap<Material, Map<Byte, String>> permissionDataNames = new HashMap<Material, Map<Byte, String>>();
         for (Material material : Material.values()) {
             if (material.equals(Material.INK_SACK)) {
-                permissionNames.put(material, PERMISSION_PREFIX + PERMISSION_DYES);
+                HashMap<Byte, String> dataNames = new HashMap<Byte, String>();
+                for (DyeColor color : DyeColor.values()) {
+                    dataNames.put(color.getData(),
+                            PERMISSION_PREFIX + PERMISSION_DYE + PERMISSION_SEPARATOR +
+                            color.toString().toLowerCase());
+                }
+                permissionDataNames.put(material, Collections.unmodifiableMap(dataNames));
             } else {
                 permissionNames.put(material, PERMISSION_PREFIX + material.toString().toLowerCase());
             }
         }
         PERMISSION_NAMES = Collections.unmodifiableMap(permissionNames);
+        PERMISSION_DATA_NAMES = Collections.unmodifiableMap(permissionDataNames);
     }
 
     private static final Logger log = Logger.getLogger(Incraftible.DEFAULT_LOGGER);
@@ -140,34 +161,74 @@ public class IncraftibleConfig {
      * @return List of default material permissions.
      */
     public List<Permission> createDefaultMaterialPermissions(List<Permission> parentPermissions) {
-    // Set up material permissions
-        ArrayList<Permission> materialPermissions = new ArrayList<Permission>();
         for (Permission permission : parentPermissions) {
             if (PERMISSION_STANDARD.equals(permission.getName())) {
                 // Standard permission found, now iterate and set material
                 // permissions
-                for (String childName : permission.getChildren().keySet()) {
-                    if (!childName.startsWith(PERMISSION_PREFIX)) {
-                        log.warning(LOG_PREFIX + "Unrecognised permission while creating defaults: " + childName);
-                        continue;
-                    }
-                    String materialName = childName.substring(PERMISSION_PREFIX.length());
-                    Material material;
-                    if (PERMISSION_DYES.equals(materialName)) {
-                        material = Material.INK_SACK;
-                    } else {
-                        material = Material.matchMaterial(materialName);
-                        if (material== null) {
-                            log.warning(LOG_PREFIX + "Can't match material with name: " + materialName);
-                            continue;
-                        }
-                    }
-                    materialPermissions.add(new Permission(childName, PermissionDefault.TRUE));
+                return createDefaultMaterialPermissions(permission.getChildren().keySet());
+            }
+        }
+        return new ArrayList<Permission>();
+    }
+
+    private List<Permission> createDefaultMaterialPermissions(Set<String> childNames) {
+        ArrayList<Permission> materialPermissions = new ArrayList<Permission>();
+        for (String childName : childNames) {
+            if (!childName.startsWith(PERMISSION_PREFIX)) {
+                log.warning(LOG_PREFIX + "Unrecognised permission while creating defaults: " + childName);
+                continue;
+            }
+            String materialName = childName.substring(PERMISSION_PREFIX.length());
+            Material material;
+            if (PERMISSION_DYE_ALL.equals(materialName)) {
+                material = Material.INK_SACK;
+            } else {
+                material = Material.matchMaterial(materialName);
+                if (material== null) {
+                    log.warning(LOG_PREFIX + "Can't match material with name: " + materialName);
+                    continue;
                 }
-                break;
+            }
+
+            Class<? extends MaterialData> dataClass = material.getData();
+            // For supported materials with data, add the data permissions
+            if (dataClass != null && dataClass.equals(Dye.class)) {
+                addMaterialDataPermissions(
+                        materialPermissions, childName, Dye.class, Arrays.asList(DyeColor.values()));
+            } else if (dataClass != null && dataClass.equals(Tree.class)) {
+                addMaterialDataPermissions(
+                        materialPermissions, childName, Tree.class, Arrays.asList(TreeType.values()));
+            } else {
+                materialPermissions.add(new Permission(childName, PermissionDefault.TRUE));
             }
         }
         return materialPermissions;
+    }
+
+    /**
+     * Adds material data permissions as leaf nodes defaulting to true, then add
+     * the material as a wildcard defaulting to false.
+     *
+     * @param materialPermissions
+     *            List of permissions to which nodes will be added.
+     * @param nodeName
+     *            Name of the permission name with the material.
+     * @param dataClass
+     *            Class of the material data.
+     * @param dataEnums
+     *            Values of the named enumerator.
+     */
+    private void addMaterialDataPermissions(List<Permission> materialPermissions, String nodeName,
+            Class<? extends MaterialData> dataClass, List<? extends Enum<?>> dataEnums) {
+        HashMap<String, Boolean> dataPermissions = new HashMap<String, Boolean>();
+        for (Enum<?> dataEnum : dataEnums) {
+            String dataPermissionName = dataEnum.toString().toLowerCase();
+            dataPermissions.put(dataPermissionName, true);
+            materialPermissions.add(new Permission(dataPermissionName, PermissionDefault.TRUE));
+        }
+        materialPermissions.add(new Permission(
+                nodeName + PERMISSION_SEPARATOR + PERMISSION_WILDCARD,
+                PermissionDefault.FALSE, dataPermissions));
     }
 
     /**
@@ -236,15 +297,33 @@ public class IncraftibleConfig {
      *            Item to be checked. If null, returns false.
      * @return True if the item is allowed, otherwise false.
      */
-    public boolean isItemAllowed(Material item, Player player) {
-        String permissionName = PERMISSION_NAMES.get(item);
-        if (permissionName == null) {
-            log.info("No permission defined for " + item.toString());
+    public boolean isItemAllowed(Material item, ItemStack stack, Player player) {
+        String permissionName;
+        if (item == null) {
             return false;
         }
-        log.fine(LOG_PREFIX + PERMISSION_NAMES.get(item) + ":" + player.hasPermission(PERMISSION_NAMES.get(item)));
-        return item != null
-                && (player.hasPermission(PERMISSION_NAMES.get(item)));
+        if (PERMISSION_NAMES.containsKey(item)) {
+            permissionName = PERMISSION_NAMES.get(item);
+        } else if (PERMISSION_DATA_NAMES.containsKey(item)) {
+            if (stack == null) {
+                log.warning(LOG_PREFIX + "Invalid stack " + item.toString());
+                return false;
+            }
+            MaterialData materialData = stack.getData();
+            if (materialData == null) {
+                log.warning(LOG_PREFIX + "No material data for expected item material" + item.toString());
+                return false;
+            }
+            permissionName = PERMISSION_DATA_NAMES.get(item).get(materialData.getData());
+            if (permissionName == null) {
+                log.warning(LOG_PREFIX + "No permission name stored for " + item.toString() + ":" + materialData.getData());
+                return false;
+            }
+        } else {
+            log.warning(LOG_PREFIX + "No permission stored for material " + item.toString());
+            return false;
+        }
+        return player.hasPermission(permissionName);
     }
 
     /**

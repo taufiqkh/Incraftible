@@ -39,7 +39,7 @@ public class CraftEventHandler {
      * @return True if the event is handled, false if it was not.
      */
     public boolean handleCraft(InventoryCraftEvent event, Material craftable) {
-        if (!config.isItemAllowed(craftable, event.getPlayer())) {
+        if (!config.isItemAllowed(craftable, event.getResult(), event.getPlayer())) {
             event.getPlayer().sendMessage(Message.PLAYER_MESSAGE_DISALLOWED.prepareMessage(craftable));
             event.setCancelled(true);
             log.info(String.format(LOG_ITEM_CRAFT_ATTEMPT, event.getPlayer().getName(), craftable));
