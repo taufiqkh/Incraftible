@@ -137,9 +137,13 @@ public class IncraftibleConfig {
         String nextLine = null;
         FileWriter writer = null;
         BufferedReader reader = null;
-        if (configFile.getParent() != null && !(new File(configFile.getParent()).mkdirs())) {
-            log.warning(String.format(LOG_WARN_FAILED_CREATING_CONFIG_DIRECTORY, configFile.getPath()));
-            return null;
+        if (configFile.getParent() != null) {
+            // Create the parent directory if it doesn't exist already
+            File parentDir = new File(configFile.getParent());
+            if (!parentDir.exists() && !(parentDir.mkdirs())) {
+                log.warning(String.format(LOG_WARN_FAILED_CREATING_CONFIG_DIRECTORY, configFile.getPath()));
+                return null;
+            }
         }
 
         // Read the default config file from the jar
