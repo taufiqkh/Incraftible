@@ -24,7 +24,7 @@ public class Incraftible extends JavaPlugin {
     /**
      * Name of the default logger.
      */
-    public static final String DEFAULT_LOGGER = "Minecraft";
+    public static final String DEFAULT_LOGGER = "Incraftible";
 
     private Logger log;
 
@@ -32,12 +32,7 @@ public class Incraftible extends JavaPlugin {
 
     @Override
     public final void onLoad() {
-        log = getServer().getLogger();
-        this.config = new IncraftibleConfig(this, this.getFile());
-        List<Permission> materialPermissions = config.createDefaultMaterialPermissions(this.getDescription().getPermissions());
-        for (Permission permission : materialPermissions) {
-            getServer().getPluginManager().addPermission(permission);
-        }
+        log = Logger.getLogger(DEFAULT_LOGGER);
         super.onLoad();
     }
 
@@ -49,6 +44,12 @@ public class Incraftible extends JavaPlugin {
     @Override
     public final void onEnable() {
         PluginManager pluginManager = getServer().getPluginManager();
+
+        this.config = new IncraftibleConfig(this, this.getFile());
+        List<Permission> materialPermissions = config.createDefaultMaterialPermissions(this.getDescription().getPermissions());
+        for (Permission permission : materialPermissions) {
+            pluginManager.addPermission(permission);
+        }
         if (config == null) {
             // Error in loading?
             log.warning(LOG_WARN_NO_CONFIG);

@@ -34,7 +34,7 @@ Compatibility
 Incraftible has been tested with the following:
 
 * CraftBukkit #1060
-* Spout #121
+* Spout #121, #134
 
 Planned Features
 ----------------

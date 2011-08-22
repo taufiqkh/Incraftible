@@ -2,5 +2,12 @@
 # Currently nothing is configured. If this file is deleted, a new one will be
 # generated from defaults. Note that all comments except what is in a header
 # will be lost when configuration is saved.
+#
+# Configurable options:
+#
+# messages:
+#   disallowed: <message>
+#   Message displayed to the player when crafting has been prevented. Use %s to display the name of the object crafted.
+#
 messages:
     disallowed: "You are not allowed to craft %s"

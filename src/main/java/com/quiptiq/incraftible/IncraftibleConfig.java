@@ -89,7 +89,7 @@ public class IncraftibleConfig {
         PERMISSION_NAMES = Collections.unmodifiableMap(permissionNames);
     }
 
-    private final Logger log = Logger.getLogger(Incraftible.DEFAULT_LOGGER);
+    private static Logger log = Logger.getLogger(Incraftible.DEFAULT_LOGGER);
 
     private Configuration config;
 
@@ -294,7 +294,12 @@ public class IncraftibleConfig {
      * @return True if the item is allowed, otherwise false.
      */
     public boolean isItemAllowed(Material item, Player player) {
-        log.info(LOG_PREFIX + PERMISSION_NAMES.get(item) + ":" + player.hasPermission(PERMISSION_NAMES.get(item)));
+        String permissionName = PERMISSION_NAMES.get(item);
+        if (permissionName == null) {
+            log.info("No permission defined for " + item.toString());
+            return false;
+        }
+        log.fine(LOG_PREFIX + PERMISSION_NAMES.get(item) + ":" + player.hasPermission(PERMISSION_NAMES.get(item)));
         return item != null
                 && (player.hasPermission(PERMISSION_NAMES.get(item)));
     }
