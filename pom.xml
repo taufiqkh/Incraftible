@@ -3,7 +3,7 @@
   <groupId>com.quiptiq</groupId>
   <artifactId>Incraftible</artifactId>
   <name>${project.artifactId}</name>
-  <version>0.5</version>
+  <version>0.6</version>
   <url>https://github.com/taufiqkh/Incraftible</url>
   <dependencies>
     <dependency>
