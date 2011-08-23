@@ -87,34 +87,22 @@ public final class FixedMessage {
     public static final String LOG_DISABLED = LOG_PREFIX + "Plugin disabled";
 
     /**
+     * Top-level command used for incraftible subcommands.
+     */
+    public static final String COMMAND_PREFIX = "ic";
+
+    /**
      * @{value}.
      */
     public static final String[] COMMAND_USAGE = {
             PLUGIN_NAME + " " + VERSION + " by Taufiq Hoven",
-            "/nc disallow <item number> Disallows crafting an item",
-            "/nc allow <item number>    Allows crafting an item",
-            "/nc list                   Lists all disallowed items"
+            "/" + COMMAND_PREFIX + " logperms <loggedInPlayerName>"
     };
 
     /**
      * @{value}.
      */
-    public static final String PLAYER_MESSAGE_ALLOW_USAGE = "Usage: /ic allow <itemNumber>";
-
-    /**
-     * @{value}.
-     */
-    public static final String PLAYER_MESSAGE_DISALLOW_USAGE = "Usage: /ic disallow <itemNumber>";
-
-    /**
-     * @{value}.
-     */
-    public static final String PLAYER_MESSAGE_ALLOW_SUCCESS = "Crafting of %s is now allowed.";
-
-    /**
-     * @{value}.
-     */
-    public static final String PLAYER_MESSAGE_DISALLOW_SUCCESS = "Crafting of %s is now disallowed.";
+    public static final String PLAYER_MESSAGE_LOGPERMS_USAGE = "Usage: /" + COMMAND_PREFIX + " logperms <loggedInPlayerName>";
 
     /**
      * @{value}.
@@ -125,9 +113,4 @@ public final class FixedMessage {
      * @{value}.
      */
     public static final String PLAYER_MESSAGE_LIST_NONE = "No items are currently disallowed from crafting.";
-
-    /**
-     * @{value}.
-     */
-    public static final String PLAYER_MESSAGE_LIST_HEADER = "The following items are disallowed:";
 }

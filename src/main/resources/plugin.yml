@@ -10,26 +10,16 @@ commands:
     ic:
         description: "Incraftible commands"
         usage: |
-            /ic allow <itemId>
-            /ic disallow <itemId>
-            /ic list
+            /ic logperms <loggedInPlayerName>
         aliases: []
 permissions:
     incraftible.command.*:
         description: Gives access to all incraftible commands.
         default: op
         children:
-            incraftible.command.disallow:   true
-            incraftible.command.allow:      true
-            incraftible.command.list:       true
-    incraftible.command.disallow:
-        description: Allows access to the command that disallows crafting of items.
-        default: op
-    incraftible.command.allow:
-        description: Allows access to the command that allows crafting of items.
-        default: op
-    incraftible.command.list:
-        description: Allows access to the command that lists disallowed items.
+            incraftible.command.logperms:   true
+    incraftible.command.logperms:
+        description: Allows access to the command that logs all permissions for a player.
         default: op
     incraftible.craft.unknown:
         description: Currently experimental. Allows crafting of materials that are not recognised by Incraftible. This means that plugin updates will only be required for explicit control of these materials.

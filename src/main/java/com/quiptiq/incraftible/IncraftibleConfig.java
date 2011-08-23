@@ -10,16 +10,16 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.TreeSet;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.config.Configuration;
 
@@ -89,11 +89,9 @@ public class IncraftibleConfig {
         PERMISSION_NAMES = Collections.unmodifiableMap(permissionNames);
     }
 
-    private static Logger log = Logger.getLogger(Incraftible.DEFAULT_LOGGER);
+    private static final Logger log = Logger.getLogger(Incraftible.DEFAULT_LOGGER);
 
     private Configuration config;
-
-    private final HashSet<Material> disallowedItems = new HashSet<Material>();
 
     /**
      * Creates a new IncraftibleConfig based on the specified Bukkit
@@ -232,61 +230,6 @@ public class IncraftibleConfig {
     }
 
     /**
-     * Disallows the specified item and saves the config. If the item is already
-     * disallowed, does nothing.
-     *
-     * TODO: Implement or remove this
-     *
-     * @param material
-     *            Material of item to disallow.
-     * @return True if the disallow was successful, false if the item was null.
-     */
-    public boolean disallowItem(Material material) {
-        if (material == null) {
-            // log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID,
-            // material));
-            return false;
-        }
-        disallowedItems.add(material);
-        return saveDisallowedItems();
-    }
-
-    /**
-     * Allows the specified item and saves the config. If the item is already
-     * allowed, does nothing.
-     *
-     * @param material
-     *            Id of the item to allow.
-     * @return True if the allow was successful, false if the item id was
-     *         invalid.
-     */
-    public boolean allowItem(Material material) {
-        if (material == null) {
-            // log.warning(String.format(LOG_WARN_INVALID_DISALLOWED_ITEM_ID,
-            // material));
-            return false;
-        }
-        disallowedItems.remove(material);
-        return saveDisallowedItems();
-    }
-
-    /**
-     * Saves currently disallowed items.
-     *
-     * TODO: Implement or remove this
-     *
-     * @return True if the save was successful, otherwise false.
-     */
-    private boolean saveDisallowedItems() {
-        List<Integer> itemIds = new ArrayList<Integer>();
-        for (Material item : disallowedItems) {
-            itemIds.add(item.getId());
-        }
-        // config.setProperty(ConfigType.DISALLOWED_ITEM.key, itemIds);
-        return config.save();
-    }
-
-    /**
      * Whether or not the specified item is allowed.
      *
      * @param item
@@ -305,13 +248,22 @@ public class IncraftibleConfig {
     }
 
     /**
-     * Returns a set of all currently disallowed items.
+     * Logs all incraftible permissions for the specified player.
      *
-     * TODO: Implement or remove this.
-     *
-     * @return Set of all disallowed items.
+     * @param player
+     *            Player for which permissions are logged.
      */
-    public Set<Material> getDisallowedItems() {
-        return new HashSet<Material>(disallowedItems);
+    public void logCraftPermissions(Player player) {
+        TreeSet<String> sortedLogEntries = new TreeSet<String>();
+        for (PermissionAttachmentInfo info : player.getEffectivePermissions()) {
+            String permissionName = info.getPermission();
+            if (!permissionName.startsWith(PERMISSION_PREFIX)) {
+                continue;
+            }
+            sortedLogEntries.add(permissionName + ":" + info.getValue());
+        }
+        for (String logEntry : sortedLogEntries) {
+            log.info(logEntry);
+        }
     }
 }

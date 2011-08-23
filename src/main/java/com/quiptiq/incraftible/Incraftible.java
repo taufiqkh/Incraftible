@@ -14,6 +14,8 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.quiptiq.incraftible.message.FixedMessage;
+
 /**
  * Plugin for intercepting crafting events.
  *
@@ -57,7 +59,7 @@ public class Incraftible extends JavaPlugin {
             if (pluginManager.getPlugin("Spout") == null) {
                 log.warning(LOG_WARN_NO_SPOUT);
             }
-            getCommand(CommandHandler.COMMAND).setExecutor(new CommandHandler(config));
+            getCommand(FixedMessage.COMMAND_PREFIX).setExecutor(new CommandHandler(config));
             pluginManager.registerEvent(
                     Type.CUSTOM_EVENT, new CraftEventListener(new CraftEventHandler(this.config)), Priority.Normal,
                     this);
