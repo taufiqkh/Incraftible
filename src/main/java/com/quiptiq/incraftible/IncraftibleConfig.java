@@ -333,6 +333,9 @@ public class IncraftibleConfig {
      *            Player for which permissions are logged.
      */
     public void logCraftPermissions(Player player) {
+        if (player == null) {
+            log.warning(LOG_PREFIX + "Can't log permissions for null player");
+        }
         TreeSet<String> sortedLogEntries = new TreeSet<String>();
         for (PermissionAttachmentInfo info : player.getEffectivePermissions()) {
             String permissionName = info.getPermission();

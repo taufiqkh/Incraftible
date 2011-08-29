@@ -9,5 +9,6 @@
 #   disallowed: <message>
 #   Message displayed to the player when crafting has been prevented. Use %s to display the name of the object crafted.
 #
+numeric_ids:    false
 messages:
     disallowed: "You are not allowed to craft %s"
