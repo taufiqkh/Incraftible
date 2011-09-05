@@ -147,7 +147,7 @@ permissions:
             incraftible.craft.detector_rail: true
             incraftible.craft.piston_sticky_base: true
             incraftible.craft.piston_base: true
-            incraftible.craft.wool: true
+            incraftible.craft.wool.*: true
             incraftible.craft.gold_block: true
             incraftible.craft.iron_block: true
             incraftible.craft.double_step: true

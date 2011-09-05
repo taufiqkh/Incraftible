@@ -10,12 +10,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.junit.After;
@@ -140,38 +137,6 @@ public class IncraftibleConfigTest {
         assertFalse(
                 "Default items configured as disallowed should be returned as such",
                 config.isItemAllowed(testMaterial, null, mockPlayer));
-    }
-
-    @Test
-    public void testEmptyDefaultPermissions() throws IOException, InvalidDescriptionException {
-        IncraftibleConfig config = new IncraftibleConfig(new TestIncraftible(), new File(TEST_JAR_PATH));
-        ArrayList<Permission> permissions = new ArrayList<Permission>();
-        assertEquals("Empty default permissions list should result in empty material permissions",
-                0, config.createDefaultMaterialPermissions(permissions).size());
-    }
-
-    @Test
-    public void testNoMatchingDefaultPermissions() throws IOException, InvalidDescriptionException {
-        IncraftibleConfig config = new IncraftibleConfig(new TestIncraftible(), new File(TEST_JAR_PATH));
-        ArrayList<Permission> permissions = new ArrayList<Permission>();
-        HashMap<String, Boolean> children = new HashMap<String, Boolean>();
-        children.put("incraftible.dummychild", true);
-        permissions.add(mockPermission("incraftible.dummy", children));
-        assertEquals("Empty default permissions list should result in empty material permissions",
-                0, config.createDefaultMaterialPermissions(permissions).size());
-    }
-
-    /**
-     * Creates a mock permission. Needed as permission creation is not well
-     * designed for testing as it has too many side-effects.
-     *
-     * @return  Mock permission with the specified name and children.
-     */
-    public Permission mockPermission(String name, HashMap<String, Boolean> children) {
-        Permission permission = mock(Permission.class);
-        when(permission.getName()).thenReturn(name);
-        when(permission.getChildren()).thenReturn(children);
-        return permission;
     }
 
     /**

@@ -32,6 +32,8 @@ public class Incraftible extends JavaPlugin {
 
     private IncraftibleConfig config;
 
+    private final PermissionsReference perms = PermissionsReference.getInstance();
+
     @Override
     public final void onLoad() {
         log = Logger.getLogger(DEFAULT_LOGGER);
@@ -48,7 +50,8 @@ public class Incraftible extends JavaPlugin {
         PluginManager pluginManager = getServer().getPluginManager();
 
         this.config = new IncraftibleConfig(this, this.getFile());
-        List<Permission> materialPermissions = config.createDefaultMaterialPermissions(this.getDescription().getPermissions());
+        List<Permission> materialPermissions =
+                perms.createDefaultMaterialPermissions(this.getDescription().getPermissions());
         for (Permission permission : materialPermissions) {
             pluginManager.addPermission(permission);
         }

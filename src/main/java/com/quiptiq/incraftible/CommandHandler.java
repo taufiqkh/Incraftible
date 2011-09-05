@@ -23,7 +23,7 @@ public class CommandHandler implements CommandExecutor {
     /**
      * Parent permission for Incraftible commands.
      */
-    private static final String PERMISSION_COMMAND_PARENT = IncraftibleConfig.PERMISSION_ROOT + ".command";
+    private static final String PERMISSION_COMMAND_PARENT = PermissionsReference.PERMISSION_ROOT + ".command";
 
     /**
      * Permission for all Incraftible commands.

@@ -1,34 +1,18 @@
 package com.quiptiq.incraftible;
 
+import static com.quiptiq.incraftible.PermissionsReference.PERMISSION_CRAFT_PREFIX;
 import static com.quiptiq.incraftible.message.FixedMessage.LOG_PREFIX;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
 import java.util.TreeSet;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.TreeType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Dye;
 import org.bukkit.material.MaterialData;
-import org.bukkit.material.Tree;
-import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.config.Configuration;
 
 import com.quiptiq.incraftible.message.Message;
@@ -41,6 +25,8 @@ import com.quiptiq.incraftible.message.Message;
  * @author Taufiq Hoven
  */
 public class IncraftibleConfig {
+
+    private static final Logger log = Logger.getLogger(Incraftible.DEFAULT_LOGGER);
 
     private static final String CONFIG_FILENAME = "config.yml";
 
@@ -55,64 +41,9 @@ public class IncraftibleConfig {
 
     private static final String LOG_WARN_CLOSE_FILE_WRITER = LOG_PREFIX + "Couldn't close file writer";
 
-    /**
-     * Root node for all incraftible permissions.
-     */
-    public static final String PERMISSION_ROOT = "incraftible";
-
-    /**
-     * Prefix for Incraftible crafting permissions.
-     */
-    private static final String PERMISSION_PREFIX = PERMISSION_ROOT + ".craft.";
-
-    /**
-     * Standard permissions as per vanilla Minecraft.
-     */
-    public static final String PERMISSION_STANDARD = PERMISSION_PREFIX + "standard";
-
-    public static final String PERMISSION_SEPARATOR = ".";
-
-    public static final String PERMISSION_WILDCARD = "*";
-
-    /**
-     * Special case for dye, which for various reasons is represented by the
-     * INK_SACK Material.
-     */
-    private static final String PERMISSION_DYE = "dye";
-
-    private static final String PERMISSION_DYE_ALL = PERMISSION_DYE + ".*";
-
-    /**
-     * Map from each material to the name-based permission that controls its
-     * crafting.
-     */
-    private static final Map<Material, String> PERMISSION_NAMES;
-
-    private static final Map<Material, Map<Byte, String>> PERMISSION_DATA_NAMES;
-
-    static {
-        HashMap<Material, String> permissionNames = new HashMap<Material, String>();
-        HashMap<Material, Map<Byte, String>> permissionDataNames = new HashMap<Material, Map<Byte, String>>();
-        for (Material material : Material.values()) {
-            if (material.equals(Material.INK_SACK)) {
-                HashMap<Byte, String> dataNames = new HashMap<Byte, String>();
-                for (DyeColor color : DyeColor.values()) {
-                    dataNames.put(color.getData(),
-                            PERMISSION_PREFIX + PERMISSION_DYE + PERMISSION_SEPARATOR +
-                            color.toString().toLowerCase());
-                }
-                permissionDataNames.put(material, Collections.unmodifiableMap(dataNames));
-            } else {
-                permissionNames.put(material, PERMISSION_PREFIX + material.toString().toLowerCase());
-            }
-        }
-        PERMISSION_NAMES = Collections.unmodifiableMap(permissionNames);
-        PERMISSION_DATA_NAMES = Collections.unmodifiableMap(permissionDataNames);
-    }
-
-    private static final Logger log = Logger.getLogger(Incraftible.DEFAULT_LOGGER);
-
     private Configuration config;
+
+    private final PermissionsReference incraftiblePerms = PermissionsReference.getInstance();
 
     /**
      * Creates a new IncraftibleConfig based on the specified Bukkit
@@ -148,87 +79,6 @@ public class IncraftibleConfig {
                 message.overrideMessage(configuredMessage);
             }
         }
-    }
-
-    /**
-     * Finds the standard parent permission in a list of permissions and
-     * generates a list of default material name permissions based on the
-     * children of that parent. The child nodes must be by material name, not
-     * id.
-     *
-     * @param parentPermissions
-     *            List of default permissions.
-     * @return List of default material permissions.
-     */
-    public List<Permission> createDefaultMaterialPermissions(List<Permission> parentPermissions) {
-        for (Permission permission : parentPermissions) {
-            if (PERMISSION_STANDARD.equals(permission.getName())) {
-                // Standard permission found, now iterate and set material
-                // permissions
-                return createDefaultMaterialPermissions(permission.getChildren().keySet());
-            }
-        }
-        return new ArrayList<Permission>();
-    }
-
-    private List<Permission> createDefaultMaterialPermissions(Set<String> childNames) {
-        ArrayList<Permission> materialPermissions = new ArrayList<Permission>();
-        for (String childName : childNames) {
-            if (!childName.startsWith(PERMISSION_PREFIX)) {
-                log.warning(LOG_PREFIX + "Unrecognised permission while creating defaults: " + childName);
-                continue;
-            }
-            String materialName = childName.substring(PERMISSION_PREFIX.length());
-            Material material;
-            if (PERMISSION_DYE_ALL.equals(materialName)) {
-                material = Material.INK_SACK;
-            } else {
-                material = Material.matchMaterial(materialName);
-                if (material== null) {
-                    log.warning(LOG_PREFIX + "Can't match material with name: " + materialName);
-                    continue;
-                }
-            }
-
-            Class<? extends MaterialData> dataClass = material.getData();
-            // For supported materials with data, add the data permissions
-            if (dataClass != null && dataClass.equals(Dye.class)) {
-                addMaterialDataPermissions(
-                        materialPermissions, childName, Dye.class, Arrays.asList(DyeColor.values()));
-            } else if (dataClass != null && dataClass.equals(Tree.class)) {
-                addMaterialDataPermissions(
-                        materialPermissions, childName, Tree.class, Arrays.asList(TreeType.values()));
-            } else {
-                materialPermissions.add(new Permission(childName, PermissionDefault.TRUE));
-            }
-        }
-        return materialPermissions;
-    }
-
-    /**
-     * Adds material data permissions as leaf nodes defaulting to true, then add
-     * the material as a wildcard defaulting to false.
-     *
-     * @param materialPermissions
-     *            List of permissions to which nodes will be added.
-     * @param nodeName
-     *            Name of the permission name with the material.
-     * @param dataClass
-     *            Class of the material data.
-     * @param dataEnums
-     *            Values of the named enumerator.
-     */
-    private void addMaterialDataPermissions(List<Permission> materialPermissions, String nodeName,
-            Class<? extends MaterialData> dataClass, List<? extends Enum<?>> dataEnums) {
-        HashMap<String, Boolean> dataPermissions = new HashMap<String, Boolean>();
-        for (Enum<?> dataEnum : dataEnums) {
-            String dataPermissionName = dataEnum.toString().toLowerCase();
-            dataPermissions.put(dataPermissionName, true);
-            materialPermissions.add(new Permission(dataPermissionName, PermissionDefault.TRUE));
-        }
-        materialPermissions.add(new Permission(
-                nodeName + PERMISSION_SEPARATOR + PERMISSION_WILDCARD,
-                PermissionDefault.FALSE, dataPermissions));
     }
 
     /**
@@ -302,9 +152,9 @@ public class IncraftibleConfig {
         if (item == null) {
             return false;
         }
-        if (PERMISSION_NAMES.containsKey(item)) {
-            permissionName = PERMISSION_NAMES.get(item);
-        } else if (PERMISSION_DATA_NAMES.containsKey(item)) {
+        if (incraftiblePerms.hasBasePermission(item)) {
+            permissionName = incraftiblePerms.getBasePermissionName(item);
+        } else if (incraftiblePerms.hasDataPermission(item)) {
             if (stack == null) {
                 log.warning(LOG_PREFIX + "Invalid stack " + item.toString());
                 return false;
@@ -314,7 +164,8 @@ public class IncraftibleConfig {
                 log.warning(LOG_PREFIX + "No material data for expected item material" + item.toString());
                 return false;
             }
-            permissionName = PERMISSION_DATA_NAMES.get(item).get(materialData.getData());
+            permissionName = incraftiblePerms.getDataPermissionName(item, materialData.getData());
+            log.fine("Checking permission value for " + permissionName);
             if (permissionName == null) {
                 log.warning(LOG_PREFIX + "No permission name stored for " + item.toString() + ":" + materialData.getData());
                 return false;
@@ -327,7 +178,8 @@ public class IncraftibleConfig {
     }
 
     /**
-     * Logs all incraftible permissions for the specified player.
+     * Logs all incraftible permissions for the specified player. This does not
+     * include default permissions.
      *
      * @param player
      *            Player for which permissions are logged.
@@ -335,11 +187,12 @@ public class IncraftibleConfig {
     public void logCraftPermissions(Player player) {
         if (player == null) {
             log.warning(LOG_PREFIX + "Can't log permissions for null player");
+            return;
         }
         TreeSet<String> sortedLogEntries = new TreeSet<String>();
         for (PermissionAttachmentInfo info : player.getEffectivePermissions()) {
             String permissionName = info.getPermission();
-            if (!permissionName.startsWith(PERMISSION_PREFIX)) {
+            if (!permissionName.startsWith(PERMISSION_CRAFT_PREFIX)) {
                 continue;
             }
             sortedLogEntries.add(permissionName + ":" + info.getValue());
