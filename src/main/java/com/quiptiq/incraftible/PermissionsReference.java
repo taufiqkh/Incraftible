@@ -191,13 +191,14 @@ public final class PermissionsReference {
             if (PERMISSION_STANDARD.equals(permission.getName())) {
                 // Standard permission found, now iterate and set material
                 // permissions
-                return createDefaultMaterialPermissions(permission.getChildren().keySet());
+                return createDefaultMaterialPermissions(permission.getChildren().keySet(),
+                        permission.getDefault());
             }
         }
         return new ArrayList<Permission>();
     }
 
-    private List<Permission> createDefaultMaterialPermissions(Set<String> childNames) {
+    private List<Permission> createDefaultMaterialPermissions(Set<String> childNames, PermissionDefault val) {
         ArrayList<Permission> materialPermissions = new ArrayList<Permission>();
         for (String childName : childNames) {
             if (!childName.startsWith(PERMISSION_CRAFT_PREFIX)) {
@@ -224,7 +225,8 @@ public final class PermissionsReference {
             // For supported materials with data, add the data permissions
             if (dataClass != null && MATERIAL_DATA_VALUES.containsKey(material)) {
                 addMaterialDataPermissions(
-                        materialPermissions, materialName, dataClass, MATERIAL_DATA_VALUES.get(material));
+                        materialPermissions, materialName, dataClass, MATERIAL_DATA_VALUES.get(material),
+                        val);
             } else {
                 materialPermissions.add(new Permission(childName, PermissionDefault.TRUE));
             }
@@ -246,16 +248,14 @@ public final class PermissionsReference {
      *            Values of the named enumerator.
      */
     private void addMaterialDataPermissions(List<Permission> materialPermissions, String nodeName,
-            Class<? extends MaterialData> dataClass, List<? extends Enum<?>> dataEnums) {
+            Class<? extends MaterialData> dataClass, List<? extends Enum<?>> dataEnums, PermissionDefault val) {
         HashMap<String, Boolean> dataPermissions = new HashMap<String, Boolean>();
         for (Enum<?> dataEnum : dataEnums) {
             String dataPermissionName = dataNodePermissionName(dataEnum, nodeName);
-            dataPermissions.put(dataPermissionName, true);
-            materialPermissions.add(new Permission(dataPermissionName, PermissionDefault.TRUE));
+            dataPermissions.put(dataPermissionName, PermissionDefault.FALSE.equals(val) ? false : true);
+            materialPermissions.add(new Permission(dataPermissionName, val));
         }
-        materialPermissions.add(new Permission(
-                extendAsWildcard(nodeName),
-                PermissionDefault.FALSE, dataPermissions));
+        materialPermissions.add(new Permission(extendAsWildcard(nodeName), val, dataPermissions));
     }
 
     /**

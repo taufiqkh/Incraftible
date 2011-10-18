@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -25,6 +26,9 @@ public class PermissionsReferenceTest {
         when(pluginManager.getPermissionSubscriptions(null)).thenReturn(new HashSet<Permissible>());
         Server server = mock(Server.class);
         when(server.getPluginManager()).thenReturn(pluginManager);
+        when(server.getName()).thenReturn("PermissionsReferenceTestMockServer");
+        when(server.getVersion()).thenReturn("1");
+        when(server.getLogger()).thenReturn(Logger.getLogger("PermissionsReferenceTest"));
         Bukkit.setServer(server);
     }
 

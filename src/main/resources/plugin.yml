@@ -178,6 +178,13 @@ permissions:
             incraftible.craft.glowstone: true
             incraftible.craft.jack_o_lantern: true
             incraftible.craft.trap_door: true
+            incraftible.craft.smooth_brick: true
+            incraftible.craft.iron_fence: true
+            incraftible.craft.thin_glass: true
+            incraftible.craft.melon_block: true
+            incraftible.craft.fence_gate: true
+            incraftible.craft.brick_stairs: true
+            incraftible.craft.smooth_stairs: true
             incraftible.craft.iron_spade: true
             incraftible.craft.iron_pickaxe: true
             incraftible.craft.iron_axe: true
@@ -252,3 +259,5 @@ permissions:
             incraftible.craft.cookie: true
             incraftible.craft.map: true
             incraftible.craft.shears: true
+            incraftible.craft.melon: true
+            incraftible.craft.melon_seeds: true
