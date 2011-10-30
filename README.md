@@ -17,8 +17,11 @@ been created that control permissions on a number of objects. These nodes are:
 * incraftible.craft.standard: Allows crafting of standard minecraft objects. That is, any object that you can craft on a vanilla server.
 * incraftible.craft.armor.\*: Allows crafting of all armor. These may be further subdivided into leather, iron, gold and diamond.
 
-Configuration of the plugin itself is via a yml file in the plugins/Incraftible subdirectory of the minecraft server. At the moment the only configurable option is
-the message sent to the player when crafting fails.
+Configuration of the plugin itself is via a yml file in the plugins/Incraftible subdirectory of the minecraft server. The following options are supported:
+
+    messages:
+      disallowed: The message shown when a player is prevented from crafting. Use %s to denote the item name.
+    event.craft.returnvalue.null: Set this to true if the result from the crafting event should be set to null after being handled. Some other plugins require this for interoperability.
 
 Dependencies
 ------------
@@ -33,8 +36,8 @@ Compatibility
 
 Incraftible has been tested with the following:
 
-* CraftBukkit #1060
-* Spout #121, #134
+* CraftBukkit #1337
+* Spout #419
 
 Planned Features
 ----------------

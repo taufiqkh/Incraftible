@@ -6,10 +6,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -181,7 +178,7 @@ public class IncraftibleConfigTest {
             PluginDescriptionFile description = new PluginDescriptionFile(pluginFileReader);
             initialize(
                     null, null, description, new File(TEST_CONFIG_DIR), new File(TEST_CONFIG_DIR + TEST_JAR_PATH),
-                    getClassLoader());
+                    IncraftibleConfigTest.class.getClassLoader());
         }
     }
 }

@@ -42,6 +42,9 @@ public class CraftEventHandler {
         if (!config.isItemAllowed(craftable, event.getResult(), event.getPlayer())) {
             event.getPlayer().sendMessage(Message.PLAYER_MESSAGE_DISALLOWED.prepareMessage(craftable));
             event.setCancelled(true);
+            if (config.isEventReturnValueMadeNull()) {
+                event.setResult(null);
+            }
             log.info(String.format(LOG_ITEM_CRAFT_ATTEMPT, event.getPlayer().getName(), craftable));
             return true;
         }

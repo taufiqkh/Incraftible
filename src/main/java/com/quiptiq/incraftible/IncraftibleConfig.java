@@ -9,11 +9,11 @@ import java.util.jar.JarFile;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.util.config.Configuration;
 
 import com.quiptiq.incraftible.message.Message;
 
@@ -41,7 +41,11 @@ public class IncraftibleConfig {
 
     private static final String LOG_WARN_CLOSE_FILE_WRITER = LOG_PREFIX + "Couldn't close file writer";
 
-    private Configuration config;
+    private static final String CONFIG_CRAFT_EVENT_RETURN_VALUE_NULL = "event.craft.returnvalue.null";
+
+    private FileConfiguration config;
+
+    private boolean eventReturnValueMadeNull = false;
 
     private final PermissionsReference incraftiblePerms = PermissionsReference.getInstance();
 
@@ -70,7 +74,8 @@ public class IncraftibleConfig {
             log.info(String.format(LOG_DEFAULT_CONFIG, configFile.getPath()));
             config = loadDefaultConfig(plugin, pluginFile, configFile);
         } else {
-            config = plugin.getConfiguration();
+            plugin.reloadConfig();
+            config = plugin.getConfig();
         }
         // Override configurable messages
         for (Message message : Message.values()) {
@@ -79,6 +84,7 @@ public class IncraftibleConfig {
                 message.overrideMessage(configuredMessage);
             }
         }
+        eventReturnValueMadeNull = config.getBoolean(CONFIG_CRAFT_EVENT_RETURN_VALUE_NULL, false);
     }
 
     /**
@@ -93,7 +99,7 @@ public class IncraftibleConfig {
      *            File that will contain the config.
      * @return
      */
-    private Configuration loadDefaultConfig(Incraftible plugin, File pluginFile, File configFile) {
+    private FileConfiguration loadDefaultConfig(Incraftible plugin, File pluginFile, File configFile) {
         // Use the default that is packaged in the Incraftible jar
         String nextLine = null;
         FileWriter writer = null;
@@ -135,8 +141,8 @@ public class IncraftibleConfig {
                 }
             }
         }
-        Configuration config = plugin.getConfiguration();
-        config.load();
+        plugin.reloadConfig();
+        FileConfiguration config = plugin.getConfig();
         return config;
     }
 
@@ -200,5 +206,16 @@ public class IncraftibleConfig {
         for (String logEntry : sortedLogEntries) {
             log.info(logEntry);
         }
+    }
+
+    /**
+     * Whether or not a craft event return value should be set to null once
+     * handled.
+     *
+     * @return True if a craft event return value should be set to null when it
+     *         is handled, otherwise false.
+     */
+    public boolean isEventReturnValueMadeNull() {
+        return eventReturnValueMadeNull;
     }
 }
