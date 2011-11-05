@@ -13,3 +13,4 @@ numeric_ids:    false
 messages:
     disallowed: "You are not allowed to craft %s"
 event.craft.returnvalue.null:   false
+craft.default:  standard

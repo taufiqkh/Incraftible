@@ -49,22 +49,24 @@ public class Incraftible extends JavaPlugin {
     public final void onEnable() {
         PluginManager pluginManager = getServer().getPluginManager();
 
-        this.config = new IncraftibleConfig(this, this.getFile());
-        List<Permission> materialPermissions =
-                perms.createDefaultMaterialPermissions(this.getDescription().getPermissions());
-        for (Permission permission : materialPermissions) {
-            pluginManager.addPermission(permission);
-        }
+        config = new IncraftibleConfig(this, this.getFile());
         if (config == null) {
             // Error in loading?
             log.warning(LOG_WARN_NO_CONFIG);
         } else {
+            if (!IncraftibleConfig.CONFIG_CRAFT_DEFAULT_NONE.equals(config.getDefaultCraftPermission())) {
+                List<Permission> materialPermissions =
+                        perms.createDefaultMaterialPermissions(this.getDescription().getPermissions());
+                for (Permission permission : materialPermissions) {
+                    pluginManager.addPermission(permission);
+                }
+            }
             if (pluginManager.getPlugin("Spout") == null) {
                 log.warning(LOG_WARN_NO_SPOUT);
             }
             getCommand(FixedMessage.COMMAND_PREFIX).setExecutor(new CommandHandler(config));
             pluginManager.registerEvent(
-                    Type.CUSTOM_EVENT, new CraftEventListener(new CraftEventHandler(this.config)), Priority.Normal,
+                    Type.CUSTOM_EVENT, new CraftEventListener(new CraftEventHandler(config)), Priority.Normal,
                     this);
         }
         log.info(LOG_ENABLED);

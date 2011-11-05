@@ -26,6 +26,19 @@ import com.quiptiq.incraftible.message.Message;
  */
 public class IncraftibleConfig {
 
+    /**
+     * When set in the {@link #CONFIG_CRAFT_DEFAULT} config item, denotes that
+     * all crafting as per default minecraft is allowed.
+     */
+    public static final String CONFIG_CRAFT_DEFAULT_STANDARD = "standard";
+
+    /**
+     * When set in the {@link #CONFIG_CRAFT_DEFAULT} config item, denotes that
+     * no crafting is allowed by default. Items must be whitelisted to be
+     * crafted.
+     */
+    public static final String CONFIG_CRAFT_DEFAULT_NONE = "none";
+
     private static final Logger log = Logger.getLogger(Incraftible.DEFAULT_LOGGER);
 
     private static final String CONFIG_FILENAME = "config.yml";
@@ -42,6 +55,8 @@ public class IncraftibleConfig {
     private static final String LOG_WARN_CLOSE_FILE_WRITER = LOG_PREFIX + "Couldn't close file writer";
 
     private static final String CONFIG_CRAFT_EVENT_RETURN_VALUE_NULL = "event.craft.returnvalue.null";
+
+    private static final String CONFIG_CRAFT_DEFAULT = "craft.default";
 
     private FileConfiguration config;
 
@@ -144,6 +159,18 @@ public class IncraftibleConfig {
         plugin.reloadConfig();
         FileConfiguration config = plugin.getConfig();
         return config;
+    }
+
+    /**
+     * @return Default method of granting craft permissions. Possible values
+     *         are:
+     *         <ul>
+     *         <li>{@link #CONFIG_CRAFT_DEFAULT_STANDARD}</li>
+     *         <li>{@link #CONFIG_CRAFT_DEFAULT_NONE}</li>
+     *         </ul>
+     */
+    public String getDefaultCraftPermission() {
+        return config.getString(CONFIG_CRAFT_DEFAULT, CONFIG_CRAFT_DEFAULT_STANDARD);
     }
 
     /**
