@@ -25,20 +25,6 @@ import com.quiptiq.incraftible.message.Message;
  * @author Taufiq Hoven
  */
 public class IncraftibleConfig {
-
-    /**
-     * When set in the {@link #CONFIG_CRAFT_DEFAULT} config item, denotes that
-     * all crafting as per default minecraft is allowed.
-     */
-    public static final String CONFIG_CRAFT_DEFAULT_STANDARD = "standard";
-
-    /**
-     * When set in the {@link #CONFIG_CRAFT_DEFAULT} config item, denotes that
-     * no crafting is allowed by default. Items must be whitelisted to be
-     * crafted.
-     */
-    public static final String CONFIG_CRAFT_DEFAULT_NONE = "none";
-
     private static final Logger log = Logger.getLogger(Incraftible.DEFAULT_LOGGER);
 
     private static final String CONFIG_FILENAME = "config.yml";
@@ -163,14 +149,17 @@ public class IncraftibleConfig {
 
     /**
      * @return Default method of granting craft permissions. Possible values
-     *         are:
-     *         <ul>
-     *         <li>{@link #CONFIG_CRAFT_DEFAULT_STANDARD}</li>
-     *         <li>{@link #CONFIG_CRAFT_DEFAULT_NONE}</li>
-     *         </ul>
+     *         are defined in {@link PermissionsStrategy}
      */
-    public String getDefaultCraftPermission() {
-        return config.getString(CONFIG_CRAFT_DEFAULT, CONFIG_CRAFT_DEFAULT_STANDARD);
+    public PermissionsStrategy getDefaultCraftPermission() {
+        String defaultCraftPermissions = config.getString(CONFIG_CRAFT_DEFAULT,
+                PermissionsStrategy.STANDARD.getConfigString());
+        PermissionsStrategy strategy = PermissionsStrategy.strategyForConfig(defaultCraftPermissions);
+        if (strategy == null) {
+            log.warning("Invalid crafting default: " + defaultCraftPermissions);
+            return PermissionsStrategy.ALL;
+        }
+        return strategy;
     }
 
     /**

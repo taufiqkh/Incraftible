@@ -261,3 +261,29 @@ permissions:
             incraftible.craft.shears: true
             incraftible.craft.melon: true
             incraftible.craft.melon_seeds: true
+            incraftible.craft.mycel: true
+            incraftible.craft.water_lily: true
+            incraftible.craft.nether_brick: true
+            incraftible.craft.nether_fence: true
+            incraftible.craft.nether_brick_stairs: true
+            incraftible.craft.nether_water: true
+            incraftible.craft.enchantment_table: true
+            incraftible.craft.brewing_stand: true
+            incraftible.craft.cauldron: true
+            incraftible.craft.ender_portal: true
+            incraftible.craft.ender_portal_frame: true
+            incraftible.craft.whitestone: true
+            incraftible.craft.blaze_rod: true
+            incraftible.craft.ghast_tear: true
+            incraftible.craft.gold_nugget: true
+            incraftible.craft.nether_stalk: true
+            incraftible.craft.potion: true
+            incraftible.craft.glass_bottle: true
+            incraftible.craft.spider_eye: true
+            incraftible.craft.fermented_spider_eye: true
+            incraftible.craft.blaze_powder: true
+            incraftible.craft.magma_cream: true
+            incraftible.craft.brewing_stand_item: true
+            incraftible.craft.cauldron_item: true
+            incraftible.craft.eye_of_ender: true
+            incraftible.craft.speckled_melon: true

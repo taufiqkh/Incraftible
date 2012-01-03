@@ -54,7 +54,7 @@ public class Incraftible extends JavaPlugin {
             // Error in loading?
             log.warning(LOG_WARN_NO_CONFIG);
         } else {
-            if (!IncraftibleConfig.CONFIG_CRAFT_DEFAULT_NONE.equals(config.getDefaultCraftPermission())) {
+            if (!PermissionsStrategy.NONE.equals(config.getDefaultCraftPermission())) {
                 List<Permission> materialPermissions =
                         perms.createDefaultMaterialPermissions(this.getDescription().getPermissions());
                 for (Permission permission : materialPermissions) {
