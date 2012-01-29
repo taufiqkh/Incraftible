@@ -54,7 +54,7 @@ public class Incraftible extends JavaPlugin {
             // Error in loading?
             log.warning(LOG_WARN_NO_CONFIG);
         } else {
-            if (!PermissionsStrategy.NONE.equals(config.getDefaultCraftPermission())) {
+            if (PermissionsStrategy.STANDARD.equals(config.getPermissionsStrategy())) {
                 List<Permission> materialPermissions =
                         perms.createDefaultMaterialPermissions(this.getDescription().getPermissions());
                 for (Permission permission : materialPermissions) {
@@ -65,6 +65,8 @@ public class Incraftible extends JavaPlugin {
                 log.warning(LOG_WARN_NO_SPOUT);
             }
             getCommand(FixedMessage.COMMAND_PREFIX).setExecutor(new CommandHandler(config));
+
+            // Leave call to deprecated method as is until new api officially released
             pluginManager.registerEvent(
                     Type.CUSTOM_EVENT, new CraftEventListener(new CraftEventHandler(config)), Priority.Normal,
                     this);

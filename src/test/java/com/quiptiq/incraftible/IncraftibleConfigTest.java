@@ -110,9 +110,11 @@ public class IncraftibleConfigTest {
     @Test
     public void testIsAllowedDefault() throws IOException, InvalidDescriptionException {
         IncraftibleConfig config = new IncraftibleConfig(new TestIncraftible(), new File(TEST_JAR_PATH));
+        String allowedPermission = "incraftible.craft.clay";
         Player mockPlayer = mock(Player.class);
         Material testMaterial = Material.CLAY;
-        when(mockPlayer.hasPermission("incraftible.craft.clay")).thenReturn(true);
+        when(mockPlayer.isPermissionSet(allowedPermission)).thenReturn(true);
+        when(mockPlayer.hasPermission(allowedPermission)).thenReturn(true);
         assertTrue(
                 "Default items configured as allowed should be returned as such",
                 config.isItemAllowed(testMaterial, null, mockPlayer));
@@ -128,9 +130,11 @@ public class IncraftibleConfigTest {
     @Test
     public void testIsDisallowedDefault() throws IOException, InvalidDescriptionException {
         IncraftibleConfig config = new IncraftibleConfig(new TestIncraftible(), new File(TEST_JAR_PATH));
+        String disallowedPermission = "incraftible.craft.apple";
         Player mockPlayer = mock(Player.class);
         Material testMaterial = Material.APPLE;
-        when(mockPlayer.hasPermission("incraftible.craft.apple")).thenReturn(false);
+        when(mockPlayer.isPermissionSet(disallowedPermission)).thenReturn(true);
+        when(mockPlayer.hasPermission(disallowedPermission)).thenReturn(false);
         assertFalse(
                 "Default items configured as disallowed should be returned as such",
                 config.isItemAllowed(testMaterial, null, mockPlayer));
@@ -144,11 +148,25 @@ public class IncraftibleConfigTest {
      *             if any problems occur while creating the file.
      */
     private File createConfigFile() throws IOException {
+        return createConfigFile(PermissionsStrategy.ALL);
+    }
+
+    /**
+     * Create a test config file containing the specified permissions strategy.
+     *
+     * @param strategy
+     *            Permissions strategy for use when loaded by Incraftible.
+     * @return Newly created config file.
+     * @throws IOException
+     *             if any problems occur while creating the file.
+     */
+    private File createConfigFile(PermissionsStrategy strategy) throws IOException {
         File testConfigFile = new File(TEST_CONFIG_DIR + TEST_CONFIG_FILE);
         testConfigFile.createNewFile();
         FileWriter writer = new FileWriter(testConfigFile);
         writer.write("messages:" + NEWLINE);
-        writer.write("    disallowed: \"" + DISALLOW_TEST_MESSAGE + "\"");
+        writer.write("    disallowed: \"" + DISALLOW_TEST_MESSAGE + "\"" + NEWLINE);
+        writer.write("craft.default:  " + strategy.getConfigString());
         writer.close();
         return testConfigFile;
     }

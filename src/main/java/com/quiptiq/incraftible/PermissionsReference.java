@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.material.Dye;
 import org.bukkit.material.MaterialData;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -103,8 +104,12 @@ public final class PermissionsReference {
     private static Map<Byte, String> createMaterialDataNames(Material material, String materialName) {
         HashMap<Byte, String> dataNames = new HashMap<Byte, String>();
         if (material.equals(Material.INK_SACK) || material.equals(Material.WOOL)) {
+            Dye dyeDataGenerator = new Dye();
             for (DyeColor color : (List<DyeColor>) MATERIAL_DATA_VALUES.get(material)) {
-                dataNames.put(color.getData(),
+                // Numeric value of dye color may not be the same as the data
+                // value of a dye
+                dyeDataGenerator.setColor(color);
+                dataNames.put(dyeDataGenerator.getData(),
                         dataNodePermissionName(color, materialName));
             }
         }

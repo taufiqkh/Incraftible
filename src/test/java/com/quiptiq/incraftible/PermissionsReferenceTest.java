@@ -7,9 +7,8 @@ import static org.mockito.Mockito.when;
 import java.util.*;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
-import org.bukkit.Server;
+import org.bukkit.*;
+import org.bukkit.material.Dye;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
@@ -81,6 +80,11 @@ public class PermissionsReferenceTest {
             }
         }
         assertEquals("Default permissions should contain sample node.", true, foundSample);
+        Dye dye = new Dye();
+        dye.setColor(DyeColor.GREEN);
+        assertEquals("Default permissions should match dye name against data value",
+                "incraftible.craft.dye.green",
+                reference.getDataPermissionName(Material.INK_SACK, dye.getData()));
     }
 
     /**

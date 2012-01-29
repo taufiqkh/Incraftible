@@ -44,11 +44,15 @@ public class IncraftibleConfig {
 
     private static final String CONFIG_CRAFT_DEFAULT = "craft.default";
 
+    private static final PermissionsStrategy DEFAULT_PERMISSIONS_STRATEGY = PermissionsStrategy.ALL;
+
     private FileConfiguration config;
 
     private boolean eventReturnValueMadeNull = false;
 
     private final PermissionsReference incraftiblePerms = PermissionsReference.getInstance();
+
+    private PermissionsStrategy strategy;
 
     /**
      * Creates a new IncraftibleConfig based on the specified Bukkit
@@ -86,6 +90,13 @@ public class IncraftibleConfig {
             }
         }
         eventReturnValueMadeNull = config.getBoolean(CONFIG_CRAFT_EVENT_RETURN_VALUE_NULL, false);
+        String defaultCraftPermissions = config.getString(CONFIG_CRAFT_DEFAULT,
+                PermissionsStrategy.STANDARD.getConfigString());
+        PermissionsStrategy strategy = PermissionsStrategy.strategyForConfig(defaultCraftPermissions);
+        if (strategy == null) {
+            log.warning("Invalid crafting default: " + defaultCraftPermissions);
+            strategy = DEFAULT_PERMISSIONS_STRATEGY;
+        }
     }
 
     /**
@@ -151,15 +162,8 @@ public class IncraftibleConfig {
      * @return Default method of granting craft permissions. Possible values
      *         are defined in {@link PermissionsStrategy}
      */
-    public PermissionsStrategy getDefaultCraftPermission() {
-        String defaultCraftPermissions = config.getString(CONFIG_CRAFT_DEFAULT,
-                PermissionsStrategy.STANDARD.getConfigString());
-        PermissionsStrategy strategy = PermissionsStrategy.strategyForConfig(defaultCraftPermissions);
-        if (strategy == null) {
-            log.warning("Invalid crafting default: " + defaultCraftPermissions);
-            return PermissionsStrategy.ALL;
-        }
-        return strategy;
+    public PermissionsStrategy getPermissionsStrategy() {
+        return (strategy == null ? DEFAULT_PERMISSIONS_STRATEGY : strategy);
     }
 
     /**
@@ -187,7 +191,7 @@ public class IncraftibleConfig {
                 return false;
             }
             permissionName = incraftiblePerms.getDataPermissionName(item, materialData.getData());
-            log.fine("Checking permission value for " + permissionName);
+            log.info("Checking permission value for " + permissionName);
             if (permissionName == null) {
                 log.warning(LOG_PREFIX + "No permission name stored for " + item.toString() + ":" + materialData.getData());
                 return false;
@@ -196,7 +200,13 @@ public class IncraftibleConfig {
             log.warning(LOG_PREFIX + "No permission stored for material " + item.toString());
             return false;
         }
-        return player.hasPermission(permissionName);
+
+        // If the permission is not set, only allowed if the ALL permission strategy is in effect.
+        if (!player.isPermissionSet(permissionName)) {
+            return PermissionsStrategy.ALL.equals(strategy);
+        } else {
+            return player.hasPermission(permissionName);
+        }
     }
 
     /**

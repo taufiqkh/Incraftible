@@ -14,7 +14,9 @@ public enum PermissionsStrategy {
 
     /**
      * When set in the {@link #CONFIG_CRAFT_DEFAULT} config item, denotes that
-     * all crafting, including non-standard items, is allowed by default.
+     * all crafting, including non-standard items, is allowed by default. That
+     * is, any items for which permissions are not set are assumed to be
+     * allowed.
      */
     ALL("all"),
 

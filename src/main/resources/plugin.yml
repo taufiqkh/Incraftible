@@ -266,13 +266,14 @@ permissions:
             incraftible.craft.nether_brick: true
             incraftible.craft.nether_fence: true
             incraftible.craft.nether_brick_stairs: true
-            incraftible.craft.nether_water: true
+            incraftible.craft.nether_warts: true
             incraftible.craft.enchantment_table: true
             incraftible.craft.brewing_stand: true
             incraftible.craft.cauldron: true
             incraftible.craft.ender_portal: true
             incraftible.craft.ender_portal_frame: true
-            incraftible.craft.whitestone: true
+            incraftible.craft.ender_stone: true
+            incraftible.craft.dragon_egg: true
             incraftible.craft.blaze_rod: true
             incraftible.craft.ghast_tear: true
             incraftible.craft.gold_nugget: true
