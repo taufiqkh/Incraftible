@@ -1,5 +1,6 @@
 package com.quiptiq.incraftible;
 
+import static com.quiptiq.incraftible.message.FixedMessage.LOG_STANDARD_STRATEGY;
 import static com.quiptiq.incraftible.message.FixedMessage.LOG_DISABLED;
 import static com.quiptiq.incraftible.message.FixedMessage.LOG_ENABLED;
 import static com.quiptiq.incraftible.message.FixedMessage.LOG_WARN_NO_CONFIG;
@@ -57,6 +58,7 @@ public class Incraftible extends JavaPlugin {
             if (PermissionsStrategy.STANDARD.equals(config.getPermissionsStrategy())) {
                 List<Permission> materialPermissions =
                         perms.createDefaultMaterialPermissions(this.getDescription().getPermissions());
+                log.info(LOG_STANDARD_STRATEGY);
                 for (Permission permission : materialPermissions) {
                     pluginManager.addPermission(permission);
                 }

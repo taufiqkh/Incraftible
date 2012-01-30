@@ -87,6 +87,11 @@ public final class FixedMessage {
     public static final String LOG_DISABLED = LOG_PREFIX + "Plugin disabled";
 
     /**
+     * @{value}
+     */
+    public static final String LOG_STANDARD_STRATEGY = LOG_PREFIX + "Using standard permission strategy, generating permission nodes";
+
+    /**
      * Top-level command used for incraftible subcommands.
      */
     public static final String COMMAND_PREFIX = "ic";

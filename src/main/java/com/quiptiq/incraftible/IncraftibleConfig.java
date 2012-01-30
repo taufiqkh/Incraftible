@@ -91,8 +91,9 @@ public class IncraftibleConfig {
         }
         eventReturnValueMadeNull = config.getBoolean(CONFIG_CRAFT_EVENT_RETURN_VALUE_NULL, false);
         String defaultCraftPermissions = config.getString(CONFIG_CRAFT_DEFAULT,
-                PermissionsStrategy.STANDARD.getConfigString());
-        PermissionsStrategy strategy = PermissionsStrategy.strategyForConfig(defaultCraftPermissions);
+                DEFAULT_PERMISSIONS_STRATEGY.getConfigString());
+        log.info(LOG_PREFIX + "Using permission strategy:" + defaultCraftPermissions);
+        strategy = PermissionsStrategy.strategyForConfig(defaultCraftPermissions);
         if (strategy == null) {
             log.warning("Invalid crafting default: " + defaultCraftPermissions);
             strategy = DEFAULT_PERMISSIONS_STRATEGY;
