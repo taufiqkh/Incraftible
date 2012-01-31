@@ -192,7 +192,7 @@ public class IncraftibleConfig {
                 return false;
             }
             permissionName = incraftiblePerms.getDataPermissionName(item, materialData.getData());
-            log.info("Checking permission value for " + permissionName);
+            log.fine("Checking permission value for " + permissionName);
             if (permissionName == null) {
                 log.warning(LOG_PREFIX + "No permission name stored for " + item.toString() + ":" + materialData.getData());
                 return false;
