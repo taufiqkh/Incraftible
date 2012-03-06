@@ -3,13 +3,13 @@
   <groupId>com.quiptiq</groupId>
   <artifactId>Incraftible</artifactId>
   <name>${project.artifactId}</name>
-  <version>0.10</version>
+  <version>0.11</version>
   <url>https://github.com/taufiqkh/Incraftible</url>
   <dependencies>
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.0.1-R2-SNAPSHOT</version>
+      <version>1.2.3-R0.1</version>
     </dependency>
     <dependency>
       <groupId>org.getspout</groupId>

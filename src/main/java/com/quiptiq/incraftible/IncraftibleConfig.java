@@ -6,6 +6,7 @@ import static com.quiptiq.incraftible.message.FixedMessage.LOG_PREFIX;
 import java.io.*;
 import java.util.TreeSet;
 import java.util.jar.JarFile;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
@@ -44,6 +45,11 @@ public class IncraftibleConfig {
 
     private static final String CONFIG_CRAFT_DEFAULT = "craft.default";
 
+    /**
+     * Default logging level for configurable messages.
+     */
+    private static Level DEFAULT_LOG_LEVEL = Level.FINE;
+
     private static final PermissionsStrategy DEFAULT_PERMISSIONS_STRATEGY = PermissionsStrategy.ALL;
 
     private FileConfiguration config;
@@ -55,6 +61,13 @@ public class IncraftibleConfig {
     private PermissionsStrategy strategy;
 
     /**
+     * Level of logging to use for certain messages. Without a known logger,
+     * this is a way to get users to change logging for just this plugin,
+     * without requiring them make any complicated changes to config files.
+     */
+    private Level level = DEFAULT_LOG_LEVEL;
+
+    /**
      * Creates a new IncraftibleConfig based on the specified Bukkit
      * configuration.
      *
@@ -63,6 +76,25 @@ public class IncraftibleConfig {
      */
     public IncraftibleConfig(Incraftible plugin, File pluginFile) {
         loadConfig(plugin, pluginFile);
+    }
+
+    /**
+     * Sets the current level of logging for configurable log messages.
+     *
+     * @param level
+     *            Level at which configurable messages are logged.
+     */
+    public void setLogLevel(Level level) {
+        this.level = level;
+    }
+
+    /**
+     * Returns the current level of logging for configurable log messages.
+     *
+     * @return Level at which configurable messages are logged.
+     */
+    public Level getLogLevel() {
+        return level;
     }
 
     /**
@@ -192,7 +224,7 @@ public class IncraftibleConfig {
                 return false;
             }
             permissionName = incraftiblePerms.getDataPermissionName(item, materialData.getData());
-            log.fine("Checking permission value for " + permissionName);
+            log.log(level, "Checking permission value for " + permissionName);
             if (permissionName == null) {
                 log.warning(LOG_PREFIX + "No permission name stored for " + item.toString() + ":" + materialData.getData());
                 return false;
@@ -204,8 +236,10 @@ public class IncraftibleConfig {
 
         // If the permission is not set, only allowed if the ALL permission strategy is in effect.
         if (!player.isPermissionSet(permissionName)) {
+            log.log(level, LOG_PREFIX + permissionName + " not set, permission strategy " + strategy.toString());
             return PermissionsStrategy.ALL.equals(strategy);
         } else {
+            log.log(level, LOG_PREFIX + "Permission check for " + permissionName);
             return player.hasPermission(permissionName);
         }
     }
@@ -219,7 +253,7 @@ public class IncraftibleConfig {
      */
     public void logCraftPermissions(Player player) {
         if (player == null) {
-            log.warning(LOG_PREFIX + "Can't log permissions for null player");
+            log.warning(LOG_PREFIX + "Can't log permissions for null or offline players.");
             return;
         }
         TreeSet<String> sortedLogEntries = new TreeSet<String>();
@@ -228,7 +262,8 @@ public class IncraftibleConfig {
             if (!permissionName.startsWith(PERMISSION_CRAFT_PREFIX)) {
                 continue;
             }
-            sortedLogEntries.add(permissionName + ":" + info.getValue());
+            String value = player.isPermissionSet(permissionName) ? Boolean.toString(player.hasPermission(permissionName)) : "not set";
+            sortedLogEntries.add(permissionName + ":" + value);
         }
         for (String logEntry : sortedLogEntries) {
             log.info(logEntry);

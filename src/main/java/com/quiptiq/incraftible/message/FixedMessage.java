@@ -13,7 +13,7 @@ public final class FixedMessage {
     /**
      * Version of Incraftible: {@value}
      */
-    public static final String VERSION = "0.10";
+    public static final String VERSION = "0.11";
 
     public static final String PLUGIN_NAME = "Incraftible";
 
@@ -96,18 +96,35 @@ public final class FixedMessage {
      */
     public static final String COMMAND_PREFIX = "ic";
 
+    private static final String COMMAND_LOGPERMS = "logperms";
+    private static final String COMMAND_LOG = "log";
+
+    private static final String COMMAND_LOGPERMS_USAGE = COMMAND_LOGPERMS + " <loggedInPlayerName>";
+
+    private static final String COMMAND_LOG_USAGE = COMMAND_LOG + " (debug|info)";
+
     /**
      * @{value}.
      */
     public static final String[] COMMAND_USAGE = {
             PLUGIN_NAME + " " + VERSION + " by Taufiq Hoven",
-            "/" + COMMAND_PREFIX + " logperms <loggedInPlayerName>"
+            "/" + COMMAND_PREFIX + " " + COMMAND_LOGPERMS_USAGE,
+            "/" + COMMAND_PREFIX + " " + COMMAND_LOG_USAGE
     };
+    /**
+     * @{value}.
+     */
+    public static final String PLAYER_MESSAGE_LOG_USAGE = "Usage: /" + COMMAND_PREFIX + " " + COMMAND_LOG_USAGE;
 
     /**
      * @{value}.
      */
-    public static final String PLAYER_MESSAGE_LOGPERMS_USAGE = "Usage: /" + COMMAND_PREFIX + " logperms <loggedInPlayerName>";
+    public static final String PLAYER_MESSAGE_LOGPERMS_USAGE = "Usage: /" + COMMAND_PREFIX + " " + COMMAND_LOGPERMS_USAGE;
+
+    /**
+     * @{value}.
+     */
+    public static final String PLAYER_MESSAGE_LOG_SET = "Log level set to %s";
 
     /**
      * @{value}.

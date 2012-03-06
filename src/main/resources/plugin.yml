@@ -18,6 +18,7 @@ permissions:
         default: op
         children:
             incraftible.command.logperms:   true
+            incraftible.command.log: true
     incraftible.command.logperms:
         description: Allows access to the command that logs all permissions for a player.
         default: op
