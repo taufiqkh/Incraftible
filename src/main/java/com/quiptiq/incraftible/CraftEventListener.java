@@ -5,10 +5,13 @@ import static com.quiptiq.incraftible.message.FixedMessage.LOG_ITEM_CRAFT_ATTEMP
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.getspout.spoutapi.event.inventory.InventoryCraftEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.InventoryType.SlotType;
 
 import com.quiptiq.incraftible.message.Message;
 
@@ -40,11 +43,21 @@ public class CraftEventListener implements Listener {
      * @param event Event containing crafting information.
      */
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onInventoryCraft(InventoryCraftEvent event) {
-        if (event.isCancelled() || event.getResult() == null) {
+    public void onInventoryCraft(CraftItemEvent event) {
+        log.info("onInventoryCraft");
+        if (!SlotType.RESULT.equals(event.getSlotType())
+                || event.isCancelled()
+                || event.getRecipe() == null
+                || event.getRecipe().getResult() == null
+                || !(InventoryType.CRAFTING.equals(event.getInventory().getType())
+                        || InventoryType.WORKBENCH.equals(event.getInventory().getType()))) {
+            log.info("event.isCancelled(): " + event.isCancelled());
+            log.info("Slot type: " + event.getSlotType());
+            log.info("recipe: " + event.getRecipe());
+            log.info("Inventory type: " + event.getInventory().getType());
             return;
         }
-        handleCraft(event, event.getResult().getType());
+        handleCraft(event, event.getRecipe().getResult().getType());
     }
 
     /**
@@ -60,16 +73,20 @@ public class CraftEventListener implements Listener {
      *            Object created by the crafting.
      * @return True if the event is handled, false if it was not.
      */
-    public boolean handleCraft(InventoryCraftEvent event, Material craftable) {
-        if (!config.isItemAllowed(craftable, event.getResult(), event.getPlayer())) {
-            event.getPlayer().sendMessage(Message.PLAYER_MESSAGE_DISALLOWED.prepareMessage(craftable));
-            event.setCancelled(true);
-            // Certain
-            if (config.isEventReturnValueMadeNull()) {
-                event.setResult(null);
+    public boolean handleCraft(CraftItemEvent event, Material craftable) {
+        if (Player.class.isAssignableFrom(event.getWhoClicked().getClass())) {
+            Player player = (Player) event.getWhoClicked();
+            if (!config.isItemAllowed(craftable, event.getRecipe().getResult(), player)) {
+                player.sendMessage(Message.PLAYER_MESSAGE_DISALLOWED.prepareMessage(craftable));
+                event.setCancelled(true);
+                // Certain
+                if (config.isEventReturnValueMadeNull()) {
+                    event.setResult(null);
+                }
+                log.log(config.getLogLevel(), String.format(LOG_ITEM_CRAFT_ATTEMPT, player.getName(), craftable));
+                return true;
             }
-            log.log(config.getLogLevel(), String.format(LOG_ITEM_CRAFT_ATTEMPT, event.getPlayer().getName(), craftable));
-            return true;
         }
         return false;
-    }}
+    }
+}

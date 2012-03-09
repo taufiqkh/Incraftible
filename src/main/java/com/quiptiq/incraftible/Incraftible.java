@@ -4,7 +4,6 @@ import static com.quiptiq.incraftible.message.FixedMessage.LOG_DISABLED;
 import static com.quiptiq.incraftible.message.FixedMessage.LOG_ENABLED;
 import static com.quiptiq.incraftible.message.FixedMessage.LOG_STANDARD_STRATEGY;
 import static com.quiptiq.incraftible.message.FixedMessage.LOG_WARN_NO_CONFIG;
-import static com.quiptiq.incraftible.message.FixedMessage.LOG_WARN_NO_SPOUT;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -60,9 +59,6 @@ public class Incraftible extends JavaPlugin {
                 for (Permission permission : materialPermissions) {
                     pluginManager.addPermission(permission);
                 }
-            }
-            if (pluginManager.getPlugin("Spout") == null) {
-                log.warning(LOG_WARN_NO_SPOUT);
             }
             getCommand(FixedMessage.COMMAND_PREFIX).setExecutor(new CommandHandler(config));
 

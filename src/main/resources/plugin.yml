@@ -4,8 +4,7 @@ author: ${project.author}
 website: ${project.url}
 main: com.quiptiq.incraftible.Incraftible
 description: Intercepts crafting events.
-depend: [Spout]
-softdepend: [PermissionsBukkit,bPermissions]
+softdepend: [PermissionsBukkit,bPermissions,PermissionsEx]
 commands:
     ic:
         description: "Incraftible commands"

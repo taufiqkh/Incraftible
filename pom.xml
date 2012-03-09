@@ -12,13 +12,6 @@
       <version>1.2.3-R0.1</version>
     </dependency>
     <dependency>
-      <groupId>org.getspout</groupId>
-      <artifactId>spoutapi</artifactId>
-      <version>dev-SNAPSHOT</version>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
     <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.8.2</version>
