@@ -7,6 +7,5 @@
 	<classpathentry kind="var" path="M2_REPO/org/avaje/ebean/2.7.3/ebean-2.7.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="var" path="M2_REPO/org/mockito/mockito-all/1.9.0-rc1/mockito-all-1.9.0-rc1.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SpoutPluginAPI"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
