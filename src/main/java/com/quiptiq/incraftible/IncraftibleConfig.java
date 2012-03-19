@@ -230,8 +230,9 @@ public class IncraftibleConfig {
                 return false;
             }
         } else {
-            log.warning(LOG_PREFIX + "No permission stored for material " + item.toString());
-            return false;
+            // Attempt id-based permission
+            permissionName = PermissionsReference.extendPermissionName(
+                    PERMISSION_CRAFT_PREFIX, Integer.toString(item.getId()));
         }
 
         // If the permission is not set, only allowed if the ALL permission strategy is in effect.
